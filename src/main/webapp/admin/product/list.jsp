@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*,me.anant.PMS.model.*"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"
+ import="java.util.*,me.anant.PMS.model.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,6 +23,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Price</th>
                         <th scope="col">Qty</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +37,10 @@
                             <td><%=p.getProductName()%></td>
                             <td><%= p.getProductPrice() %></td>
                             <td><%= p.getProductQty() %></td>
+                            <td>
+                            <a class="btn btn-success" href="edit/<%=p.getProductId()%>" role="button">Edit</a>
+                            <a onclick="return confirm('Are you sure you want to delete it?');" class="btn btn-danger" href="delete?id=<%= p.getProductId() %>" role="button">Delete</a>
+                            </td>
                         </tr>
                         <%   
                         }

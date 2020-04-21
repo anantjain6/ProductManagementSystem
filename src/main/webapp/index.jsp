@@ -21,7 +21,7 @@ body {
 
         <div class="col-md-4 col-sm-4 col-xs-12"></div>
         <div class="col-md-4 col-sm-4 col-xs-12 ">
-            <form action="Login" method="post">
+            <form action="home" method="post">
                 <div class="animated zoomIn shadow p-4 mb-5 bg-white rounded border border-primary">
                     <div class="mx-auto">
                         <h1 class="font-weight-bold text-center">Login</h1>

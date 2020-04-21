@@ -1,32 +1,20 @@
 package me.anant.PMS.model;
 
-import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type")
 public class User {
 	@Id
 	@GeneratedValue
 	int id;
 	String name;
+	@Column(nullable=false, unique=true)
 	String email;
 	String password;
-	public User() {
-		// TODO Auto-generated constructor stub
-	}
-	public User(int id, String name, String email, String password) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-	}
+    String role;
 	public int getId() {
 		return id;
 	}
@@ -50,5 +38,11 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 }
