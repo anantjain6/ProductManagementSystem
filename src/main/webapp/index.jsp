@@ -1,7 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%
-if(session.getAttribute("email") == null) {
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -21,8 +18,9 @@ body {
 
         <div class="col-md-4 col-sm-4 col-xs-12"></div>
         <div class="col-md-4 col-sm-4 col-xs-12 ">
-            <form action="home" method="post">
+            <form action="" method="post">
                 <div class="animated zoomIn shadow p-4 mb-5 bg-white rounded border border-primary">
+                	${ SPRING_SECURITY_LAST_EXCEPTION.message }
                     <div class="mx-auto">
                         <h1 class="font-weight-bold text-center">Login</h1>
                     </div>
@@ -45,14 +43,3 @@ body {
     <%@include file="/includes/footer.jsp"%>
 </body>
 </html>
-<%
-} else {
- if((int)session.getAttribute("usertype") == 0) {
-     response.sendRedirect("employee/home.jsp");
- } else if((int)session.getAttribute("usertype") == 1) {
-     response.sendRedirect("technician/home.jsp");
- } else {
-     response.sendRedirect("admin/home.jsp");
- } 
-}
-%>

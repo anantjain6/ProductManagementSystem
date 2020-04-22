@@ -13,6 +13,7 @@
         </div>
         <div class="card-body">
             <form action="/admin/product/add" method="post">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 <div class="form-group">
                     <label for="productName" class="control-label">Product Name</label> <input type="text" name="productName" id="productName" class="form-control"
                         required>
