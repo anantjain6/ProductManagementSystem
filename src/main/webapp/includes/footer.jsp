@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<footer class="footer fixed-bottom py-3 bg-dark">
+<footer class="footer fixed-bottom py-3 bg-dark text-center">
   <div class="container">
     <span class="text-muted">Copyright Reserver &copy; 2020</span>
   </div>

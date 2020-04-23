@@ -18,6 +18,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+    @Autowired
+    AuthenticationSuccessHandlerImpl successHandler;
+    
 	@Bean
 	public AuthenticationProvider authProvider() {
 		DaoAuthenticationProvider dap = new DaoAuthenticationProvider();
@@ -27,31 +30,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return dap;
 	}
 
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//        .antMatchers("/")
-//            .permitAll()
-//        .antMatchers("/admin/**")
-//            .hasRole("ADMIN")
-//        .antMatchers("/customer/**")
-//            .hasRole("CUSTOMER");
-////        .and()
-////            .formLogin()
-////            .loginPage("/")
-////            .defaultSuccessUrl("/admin/product/add.jsp")
-////            .failureUrl("/?error=true")
-////            .permitAll()
-////        .and()
-////            .logout()
-////            .logoutSuccessUrl("/login?logout=true")
-////            .invalidateHttpSession(true)
-////            .permitAll()
-////        .and()
-////            .csrf()
-////            .disable();
-//    }
-	
-	
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+        		.antMatchers("/h2-console/**",
+        				"/",
+                        "/**/*.css",
+                        "/**/*.js").permitAll()
+        		.antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/customer/**").access("hasRole('CUSTOMER')")
+                .anyRequest().authenticated()
+                .and().formLogin().successHandler(successHandler);
+        http.logout()
+        .logoutUrl("/logout")
+        .invalidateHttpSession(true);
+        http.headers().frameOptions().disable();
+        http.csrf().disable();
+    }
 }

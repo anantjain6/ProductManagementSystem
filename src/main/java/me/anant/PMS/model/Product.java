@@ -3,29 +3,32 @@ package me.anant.PMS.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED) 
 public class Product {
 	@Id
 	@GeneratedValue
-	int productId;
+	long productId;
 	String productName;
 	float productPrice;
 	int productQty;
 	public Product() {
 		// TODO Auto-generated constructor stub
 	}
-	public Product(int productId, String productName, float productPrice, int productQty) {
+	public Product(long productId, String productName, float productPrice, int productQty) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
 		this.productPrice = productPrice;
 		this.productQty = productQty;
 	}
-	public int getProductId() {
+	public long getProductId() {
 		return productId;
 	}
-	public void setProductId(int productId) {
+	public void setProductId(long productId) {
 		this.productId = productId;
 	}
 	public String getProductName() {
