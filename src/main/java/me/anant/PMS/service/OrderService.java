@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import me.anant.PMS.dao.OrderRepository;
 import me.anant.PMS.model.Order;
 
+@Service
 public class OrderService {
 
 	@Autowired

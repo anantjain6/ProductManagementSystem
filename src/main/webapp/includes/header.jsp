@@ -15,6 +15,12 @@
         	<ul class="navbar-nav mr-auto">
 	            <sec:authorize access="hasRole('ADMIN')">
                 	<li class="nav-item"><a class="nav-link" href="/admin/product/list">Product</a></li>
+                	<li class="nav-item"><a class="nav-link" href="/admin/order/list">Order</a></li>
+                	<li class="nav-item"><a class="nav-link" href="/admin/product/report">Report</a></li>
+                </sec:authorize>
+	            <sec:authorize access="hasRole('CUSTOMER')">
+                	<li class="nav-item"><a class="nav-link" href="/customer">Place Order</a></li>
+                	<li class="nav-item"><a class="nav-link" href="/customer/order/list">My Orders</a></li>
                 </sec:authorize>
             </ul>
             

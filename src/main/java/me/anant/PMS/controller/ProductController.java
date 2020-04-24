@@ -3,21 +3,15 @@ package me.anant.PMS.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-
-import me.anant.PMS.dao.ProductRepository;
 import me.anant.PMS.model.Product;
 import me.anant.PMS.service.ProductService;
 
@@ -32,12 +26,11 @@ public class ProductController {
 	}
 	
 	@PostMapping("/admin/product/add")
-	public ModelAndView add(Product product, Model model) {
+	public String add(Product product, Model model, final RedirectAttributes redirectAttributes) {
 		productService.save(product);
-		ModelAndView modelAndView = new ModelAndView("admin/product/add");
-		modelAndView.addObject("msg", "Product added successfully.");
-		modelAndView.addObject("class", "alert-success");
-		return modelAndView;
+		redirectAttributes.addFlashAttribute("msg", "Product added successfully");
+		redirectAttributes.addFlashAttribute("class", "alert-success");
+		return "redirect:/admin/product/list";
 	}
 	
 	@GetMapping("/admin/product/list")
@@ -73,6 +66,13 @@ public class ProductController {
 		modelAndView.addObject("product", product);
 		modelAndView.addObject("msg", "Product Updated successfully.");
 		modelAndView.addObject("class", "alert-success");
+		return modelAndView;
+	}
+	
+	@GetMapping("/admin/product/report")
+	public ModelAndView report() {
+		ModelAndView modelAndView = new ModelAndView("admin/product/report");
+		modelAndView.addObject("pList", productService.get());
 		return modelAndView;
 	}
 }

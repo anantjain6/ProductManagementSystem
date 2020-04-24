@@ -9,44 +9,39 @@
     <%@include file="/includes/header.jsp"%>
     <main role="main" class="container"> <%@include file="/includes/msg.jsp"%>
     <div class="card">
+        <div class="card-header text-white shadow bg-success text-center">
+            <h2 class="float-left">Order Placed</h2>
+        </div>
         <div class="card-body">
-        	<form action="/customer/order_place" method="post">
 	            <table class="table table-hover">
 	                <thead>
 	                    <tr>
 	                        <th scope="col">Name</th>
 	                        <th scope="col">Price</th>
 	                        <th scope="col">Qty</th>
+	                        <th scope="col">Amount</th>
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                    <%
-	                    	List<Product> pl = (List<Product>) request.getAttribute("pList");
-	                    	for (Product p : pl)
+	                    	float sum = 0;
+	                    	Set<OrderProduct> opList = (Set<OrderProduct>) request.getAttribute("opList");
+	                    	for (OrderProduct op : opList)
 	                        {
+	                    		sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
 	                        %>
 	                        <tr>
-	                            <td><input type="checkbox" name="productId" value="<%=p.getProductId()%>"></td>
-	                            <td><%=p.getProductName()%></td>
-	                            <td>Rs. <%= p.getProductPrice() %></td>
-	                            <td>
-	                            	<select class="form-control" name="<%=p.getProductId()%>">
-	                            		<%
-	                            		for(int i=0; i<=p.getProductQty(); i++) {
-	                            			out.write("<option value=\""+i+"\">"+i+"</option>");
-	                            		}
-	                            		%>
-	                            	</select>
-	                            </td>
+	                            <td><%=op.getProduct().getProductName()%></td>
+	                            <td>Rs. <%=op.getProduct().getProductPrice()%></td>
+	                            <td><%=op.getBuyqty()%></td>
+	                            <td>rs. <%=op.getProduct().getProductPrice() * op.getBuyqty()%></td>
 	                        </tr>
 	                        <%   
 	                        }
 	                    %>
+	                    <tr><td  colspan="3" class="text-center"><b>Total Amount</b></td><td>Rs. <%= sum %></td></tr>
 	                </tbody>
 	            </table>
-	            <br>
-	            <input type="submit" class="btn btn-success btn-lg btn-block" value="Place Order">
-	        </form> 
         </div>
     </div>
     <br><br><br>
