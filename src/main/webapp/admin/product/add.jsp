@@ -1,3 +1,5 @@
+<%@page import="me.anant.PMS.model.ProductCategory"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="me.anant.PMS.model.Product"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -49,6 +51,24 @@
                         	Product p = (Product) request.getAttribute("product");
 		            		out.write("value=\""+p.getProductQty()+"\"");
 			            } %>>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory" class="control-label">Product Category</label>
+					<select name="productCategory" id="productCategory" class="form-control">
+					<%
+					List<ProductCategory> pcList = (List<ProductCategory>) request.getAttribute("pcList");
+                    for(ProductCategory pc: pcList) {
+                    	out.write("<option value=\""+pc.getId()+"\" ");
+                    	if(request.getAttribute("product") != null) {
+                    		Product p = (Product) request.getAttribute("product");
+                    		if(p.getCategory().getId() == pc.getId()) {
+                    			out.write("selected");
+                    		}
+                    	}
+                    	out.write(">"+pc.getName()+"</option>");
+                    }
+					%>
+					</select>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-success btn-lg btn-block" value="<%

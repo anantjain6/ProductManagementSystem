@@ -27,9 +27,4 @@ public class HomeController {
 		modelAndView.addObject("pList", pList);
 		return modelAndView;
 	}
-	
-	@GetMapping("/admin")
-	public String adminHome() {
-		return "admin/home";
-	}
 }

@@ -34,7 +34,7 @@
 	                            <td><%=op.getProduct().getProductName()%></td>
 	                            <td>Rs. <%=op.getProduct().getProductPrice()%></td>
 	                            <td><%=op.getBuyqty()%></td>
-	                            <td>rs. <%=op.getProduct().getProductPrice() * op.getBuyqty()%></td>
+	                            <td>Rs. <%=op.getProduct().getProductPrice() * op.getBuyqty()%></td>
 	                        </tr>
 	                        <%   
 	                        }

@@ -37,7 +37,9 @@
                             <%
                             int sumQty = 0;
                             for(OrderProduct op: p.getOrderProduct()) {
-                            	sumQty = sumQty + op.getBuyqty();
+                            	if(!op.getOrder().getStatus().equals("CANCEL") && !op.getOrder().getStatus().equals("REJECT")) {
+                            		sumQty = sumQty + op.getBuyqty();
+                            	}
                             }
                             %>
                             <td><%= sumQty %></td>

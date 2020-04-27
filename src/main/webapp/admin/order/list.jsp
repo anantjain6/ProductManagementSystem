@@ -47,7 +47,16 @@
                             <td><%= count %></td>
                             <td>Rs. <%= sum %></td>
                             <td><%= o.getStatus() %></td>
-                            <td></td>
+                            <td>
+                            	<form action="status" method="POST">
+                            		<input type="hidden" name="id" value="<%=o.getId()%>">
+                            		<select name="status"  class="control-label">
+                            			<option value="CONFIRM">CONFIRM</option>
+                            			<option value="REJECT">REJECT</option>
+                            		</select>
+                            		<input type="submit" class="btn btn-success" value="Update Status">
+                            	</form>
+                            </td>
                         </tr>
                         <%   
                         }

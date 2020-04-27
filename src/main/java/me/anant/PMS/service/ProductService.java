@@ -27,4 +27,16 @@ public class ProductService {
 	public Optional<Product> findById(Long id) {
 		return pr.findById(id);
 	}
+	public void deductQty(long id, int qty) {
+		Product product = pr.findById(id).get();
+		int newQty = product.getProductQty() - qty;
+		product.setProductQty(newQty);
+		pr.save(product);
+	}
+	public void addQty(long id, int qty) {
+		Product product = pr.findById(id).get();
+		int newQty = product.getProductQty() + qty;
+		product.setProductQty(newQty);
+		pr.save(product);
+	}
 }

@@ -4,8 +4,10 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -20,16 +22,20 @@ public class Product {
 	
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     Set<OrderProduct> orderProduct;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+    ProductCategory category;
 	
 	public Product() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Product(String productName, float productPrice, int productQty) {
+	public Product(String productName, float productPrice, int productQty, ProductCategory category) {
 		super();
 		this.productName = productName;
 		this.productPrice = productPrice;
 		this.productQty = productQty;
+		this.category = category;
 	}
 
 	public long getProductId() {
@@ -71,4 +77,13 @@ public class Product {
 	public void setOrderProduct(Set<OrderProduct> orderProduct) {
 		this.orderProduct = orderProduct;
 	}
+
+	public ProductCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(ProductCategory category) {
+		this.category = category;
+	}
+	
 }

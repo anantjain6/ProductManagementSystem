@@ -11,7 +11,7 @@
     <% Order order = (Order) request.getAttribute("order"); %>
     <div class="card">
         <div class="card-header text-white shadow bg-dark">
-            <h2 class="float-left">Product Report</h2>
+            <h2 class="float-left">Order Detail</h2>
         </div>
         <div class="card-body">
         	Order ID: <%= order.getId() %><br>
@@ -41,9 +41,9 @@
                         <tr>
                             <th scope="row"><%=op.getProduct().getProductId()%></th>
                             <td><%=op.getProduct().getProductName()%></td>
-                            <td><%= op.getProduct().getProductPrice() %></td>
+                            <td>Rs. <%= op.getProduct().getProductPrice() %></td>
                             <td><%= op.getBuyqty() %></td>
-                            <td><%= op.getBuyqty() * op.getProduct().getProductPrice() %></td>
+                            <td>Rs. <%= op.getBuyqty() * op.getProduct().getProductPrice() %></td>
                         </tr>
                         <%   
                         	sumAmu = sumAmu + op.getBuyqty() * op.getProduct().getProductPrice();

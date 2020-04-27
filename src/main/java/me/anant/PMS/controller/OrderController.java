@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import me.anant.PMS.model.Order;
 import me.anant.PMS.model.OrderProduct;
@@ -35,14 +36,24 @@ public class OrderController {
 	@Autowired
 	OrderService orderService;
 	
+	@GetMapping("/customer/order_place")
+	public ModelAndView customerHome() {
+		List<Product> pList =  productService.get();
+		ModelAndView modelAndView = new ModelAndView("customer/home");
+		modelAndView.addObject("pList", pList);
+		return modelAndView;
+	}
+	
 	@PostMapping("/customer/order_place")
 	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) {
 		String[] pIds = request.getParameterValues("productId");
 		Set<OrderProduct> opList = new HashSet<>();
 		for(String pId: pIds) {
-			Product product = productService.findById(Long.parseLong(pId)).get();
+			long pid = Long.parseLong(pId);
+			Product product = productService.findById(pid).get();
 			int buyqty = Integer.parseInt(request.getParameter(pId));
 			opList.add(new OrderProduct(product, buyqty));
+			productService.deductQty(pid, buyqty);
 		}
 		User user = userService.findByEmail(principal.getName());
 		orderService.save(new Order(user, "PROCESSING", opList));
@@ -79,5 +90,25 @@ public class OrderController {
 		ModelAndView modelAndView = new ModelAndView("customer/order/detail");
 		modelAndView.addObject("order", orderService.findById(id).get());
 		return modelAndView;
+	}
+	
+	@GetMapping("customer/order/cancel")
+	public String orderCancel(@RequestParam("id") long id, final RedirectAttributes redirectAttributes) {
+		if(orderService.cancelOrder(id)) {
+			redirectAttributes.addFlashAttribute("msg", "Order cancelled successfully");
+			redirectAttributes.addFlashAttribute("class", "alert-success");
+		} else {
+			redirectAttributes.addFlashAttribute("msg", "Order not cancelled, since you can cencel PROCESSING or CONFIRMED order with 24 hours only.");
+			redirectAttributes.addFlashAttribute("class", "alert-danger");
+		}
+		return "redirect:/customer/order/list";
+	}
+	
+	@PostMapping("admin/order/status")
+	public String changeStatus(@RequestParam("id") long id, @RequestParam("status") String status, final RedirectAttributes redirectAttributes) {
+		orderService.changeStatus(id, status);
+		redirectAttributes.addFlashAttribute("msg", "Status of order changed.");
+		redirectAttributes.addFlashAttribute("class", "alert-success");
+		return "redirect:/admin/order/list";
 	}
 }

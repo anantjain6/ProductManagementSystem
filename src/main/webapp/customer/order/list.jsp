@@ -44,6 +44,7 @@
                             %>
                             <td><%= count %></td>
                             <td>Rs. <%= sum %></td>
+                            <td><%= o.getStatus() %></td>
                             <td><a onclick="return confirm('Are you sure that you want cancel this order?');" class="btn btn-danger" href="cancel?id=<%= o.getId() %>">Cancel</a></td>
                         </tr>
                         <%   
