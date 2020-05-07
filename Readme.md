@@ -7,7 +7,6 @@ It is a marketplace where customer can place order and Admin can manage inventor
 -   Spring Data JPA for Creating Custom Repository
 -   Spring Boot for Autoconfiguration and Dependency Management
 -   Spring Security for Authentication & Authorisation
--   Hibernate for Object Relation Mapping
 -   H2 In-memory Database for Storing data
 -   Java Mail API to send HTML E-Mail over SMTP
 
@@ -16,14 +15,19 @@ It is a marketplace where customer can place order and Admin can manage inventor
 -   Oracle
 -   Apache Tomcat
 
+## Configuration
+Change the SMTP details in "EmailConfig"
+
 ## Login Details
 
 #### Admin
 Username: admin@gmail.com
+
 Password: admin
 
 #### Customer
 Username: customer@gmail.com
+
 Password: user
 
 ## Screenshots

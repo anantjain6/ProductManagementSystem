@@ -21,6 +21,7 @@ import me.anant.PMS.model.Order;
 import me.anant.PMS.model.OrderProduct;
 import me.anant.PMS.model.Product;
 import me.anant.PMS.model.User;
+import me.anant.PMS.service.EmailService;
 import me.anant.PMS.service.OrderService;
 import me.anant.PMS.service.ProductService;
 import me.anant.PMS.service.UserService;
@@ -35,6 +36,9 @@ public class OrderController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	EmailService emailService;
 	
 	@GetMapping("/customer/order_place")
 	public ModelAndView customerHome() {
@@ -57,6 +61,30 @@ public class OrderController {
 		}
 		User user = userService.findByEmail(principal.getName());
 		orderService.save(new Order(user, "PROCESSING", opList));
+		
+		String message = "Hello,<br><br>Your order has been placed successfuly. Following is the detail of your order.<br><br>"
+				+ "<table>" + 
+				"<tr>" + 
+				"<th>Name</th>" + 
+				"<th>Price</th>" + 
+				"<th>Qty</th>" + 
+				"<th>Amount</th>" + 
+				"</tr>";
+		float sum = 0;
+		for (OrderProduct op : opList)
+		{
+			sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
+			message = message + "<tr>" + 
+					"<td>"+op.getProduct().getProductName()+"</td>" + 
+					"<td>Rs. "+op.getProduct().getProductPrice()+"</td>" + 
+					"<td>"+op.getBuyqty()+"</td>" + 
+					"<td>Rs. "+op.getProduct().getProductPrice() * op.getBuyqty()+"</td>" + 
+					"</tr>";
+		}
+		message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. "+sum+"</td></tr>" + 
+				"</table>";
+		emailService.send(principal.getName(), "Order Placed successfully", message);
+		
 		ModelAndView modelAndView = new ModelAndView("customer/order_place");
 		modelAndView.addObject("opList", opList);
 		return modelAndView;
