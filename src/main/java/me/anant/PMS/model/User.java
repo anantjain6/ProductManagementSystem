@@ -25,6 +25,10 @@ public class User {
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
+	public User(long id) {
+		super();
+		this.id = id;
+	}
 	public User(String name, String email, String password, String role) {
 		super();
 		this.name = name;

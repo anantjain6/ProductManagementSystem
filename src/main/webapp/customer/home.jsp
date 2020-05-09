@@ -32,7 +32,7 @@
 	                            <td>
 	                            	<select class="form-control" name="<%=p.getProductId()%>">
 	                            		<%
-	                            		for(int i=0; i<=p.getProductQty(); i++) {
+	                            		for(int i=1; i<=p.getProductQty(); i++) {
 	                            			out.write("<option value=\""+i+"\">"+i+"</option>");
 	                            		}
 	                            		%>

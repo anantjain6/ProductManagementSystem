@@ -7,7 +7,7 @@ INSERT INTO PRODUCT_CATEGORY (id, NAME) VALUES
 (2, 'Garment');
 
 INSERT INTO PRODUCT(PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QTY, CATEGORY_ID) VALUES 
-(101, 'Apple', '20.5', 100, 1),
-(102, 'Orange', '10.25', 200, 1),
-(103, 'Shirt', '220.35', 60, 2),
-(104, 'Pant', '410.25', 30, 2);
+(101, 'Apple', '20.5', 11, 1),
+(102, 'Orange', '10.25', 22, 1),
+(103, 'Shirt', '220.35', 33, 2),
+(104, 'Pant', '410.25', 44, 2);

@@ -3,10 +3,14 @@ package me.anant.PMS.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,16 +32,20 @@ public class ProductController {
 	public ModelAndView addView() {
 		ModelAndView modelAndView = new ModelAndView("admin/product/add");
 		modelAndView.addObject("pcList", categoryService.get());
+		modelAndView.addObject("command", new Product());
 		return modelAndView;
 	}
 	
 	@PostMapping("/admin/product/add")
-	public String add(Product product, @RequestParam("productCategory") long category, Model model, final RedirectAttributes redirectAttributes) {
-		product.setCategory(categoryService.findById(category).get());
+	public String add(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		if(result.hasErrors()) {
+			model.addAttribute("pcList", categoryService.get());
+			return "admin/product/add";
+		}
 		productService.save(product);
 		redirectAttributes.addFlashAttribute("msg", "Product added successfully");
 		redirectAttributes.addFlashAttribute("class", "alert-success");
-		return "redirect:/admin/product/list";
+		return "redirect:/admin/product/add";
 	}
 	
 	@GetMapping("/admin/product/list")
@@ -62,21 +70,21 @@ public class ProductController {
 		Optional<Product> optional = productService.findById(id);
 		Product product = optional.get();
 		ModelAndView modelAndView = new ModelAndView("admin/product/add");
-		modelAndView.addObject("product", product);
+		modelAndView.addObject("command", product);
 		modelAndView.addObject("pcList", categoryService.get());
 		return modelAndView;
 	}
 	
 	@PostMapping("/admin/product/update")
-	public ModelAndView updateView(Product product, @RequestParam("productCategory") long category) {
-		product.setCategory(categoryService.findById(category).get());
+	public String updateView(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+		if(result.hasErrors()) {
+			model.addAttribute("pcList", categoryService.get());
+			return "admin/product/add";
+		}
 		productService.save(product);
-		ModelAndView modelAndView = new ModelAndView("admin/product/add");
-		modelAndView.addObject("product", product);
-		modelAndView.addObject("pcList", categoryService.get());
-		modelAndView.addObject("msg", "Product Updated successfully.");
-		modelAndView.addObject("class", "alert-success");
-		return modelAndView;
+		redirectAttributes.addFlashAttribute("msg", "Product Updated successfully");
+		redirectAttributes.addFlashAttribute("class", "alert-success");
+		return "redirect:/admin/product/list";
 	}
 	
 	@GetMapping("/admin/product/report")

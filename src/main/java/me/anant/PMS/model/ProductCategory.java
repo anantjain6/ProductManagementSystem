@@ -23,6 +23,11 @@ public class ProductCategory {
 		// TODO Auto-generated constructor stub
 	}
 
+	public ProductCategory(long id) {
+		super();
+		this.id = id;
+	}
+
 	public ProductCategory(String name) {
 		super();
 		this.name = name;

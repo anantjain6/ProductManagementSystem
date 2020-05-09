@@ -7,8 +7,10 @@ It is a marketplace where customer can place order and Admin can manage inventor
 -   Spring Data JPA for Creating Custom Repository
 -   Spring Boot for Autoconfiguration and Dependency Management
 -   Spring Security for Authentication & Authorisation
+-   Hibernate Validator for form data validation
 -   H2 In-memory Database for Storing data
 -   Java Mail API to send HTML E-Mail over SMTP
+-   JSTL
 
 ## Requirements
 -   Java

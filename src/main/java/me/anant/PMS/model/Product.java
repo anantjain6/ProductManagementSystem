@@ -9,15 +9,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Product {
 	@Id
 	@GeneratedValue
 	long productId;
-	
+
+	@NotBlank(message="Product name can not be empty")
+	@Size(min = 3, message="Product name should be of minimum 3 character")
 	String productName;
+	
+	@NotNull
+	@Min(value=0, message="Product price can not be negative value.")
 	float productPrice;
+	
+	@NotNull
+	@Min(value=0, message="Product quantity can not be negative")
+	@Max(value=50, message="Product quantity can be maximum 50.")
 	int productQty;
 	
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -28,6 +42,11 @@ public class Product {
 	
 	public Product() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public Product(long productId) {
+		super();
+		this.productId = productId;
 	}
 
 	public Product(String productName, float productPrice, int productQty, ProductCategory category) {

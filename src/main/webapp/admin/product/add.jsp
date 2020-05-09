@@ -1,3 +1,5 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="me.anant.PMS.model.ProductCategory"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="me.anant.PMS.model.Product"%>
@@ -8,78 +10,49 @@
 </head>
 <body style="background-color: #f8f9fa !important;">
     <%@include file="/includes/header.jsp"%>
-    <main role="main" class="container"> <%@include file="/includes/msg.jsp"%>
+    <main role="main" class="container">
+    <%@include file="/includes/msg.jsp"%>
     <div class="card">
+       	<c:set var="action" value="/admin/product/add"/>
+       	<c:set var="title" value="Add Product"/>
+		<c:if test="${command.productId > 0}">
+		   <c:set var="action" value="/admin/product/update"/>
+       		<c:set var="title" value="Update Product"/>
+		</c:if>
         <div class="card-header text-white shadow bg-dark">
-            <h2 class="float-left"><%
-            if(request.getAttribute("product") == null) {
-            	out.write("Add Product");
-            } else {
-            	out.write("Update Product");
-            }
-            %></h2>
+            <h2 class="float-left">${title}</h2>
         </div>
         <div class="card-body">
-            <form action="<%
-            if(request.getAttribute("product") == null) {
-            	out.write("/admin/product/add");
-            } else {
-            	out.write("/admin/product/update?id="+request.getParameter("id"));
-            }
-            %>" method="post">
-            	<% if(request.getAttribute("product") != null) {
-            		out.write("<input type=\"hidden\" value=\""+request.getParameter("id")+"\" name=\"productId\">");
-	            } %>
+            <form:form action="${action}" method="post">
+            	<form:input type="hidden" path="productId"/>
             	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 <div class="form-group">
-                    <label for="productName" class="control-label">Product Name</label> <input type="text" name="productName" id="productName" class="form-control"
-                        required <% if(request.getAttribute("product") != null) {
-                        	Product p = (Product) request.getAttribute("product");
-		            		out.write("value=\""+p.getProductName()+"\"");
-			            } %>>
+                    <label for="productName" class="control-label">Product Name</label>
+					<form:input type="text" path="productName" id="productName" cssClass="form-control" required="required"/>
+                	<small class="form-text text-muted"><font color="red"><form:errors path="productName"></form:errors></font></small>
                 </div>
                 <div class="form-group">
-                    <label for="productPrice" class="control-label">Product Price</label> <input type="text" name="productPrice" id="productPrice" class="form-control"
-                        required <% if(request.getAttribute("product") != null) {
-                        	Product p = (Product) request.getAttribute("product");
-		            		out.write("value=\""+p.getProductPrice()+"\"");
-			            } %>>
+                    <label for="productPrice" class="control-label">Product Price</label>
+					<form:input type="text" path="productPrice" id="productPrice" cssClass="form-control" required="required"/>
+                	<small class="form-text text-muted"><font color="red"><form:errors path="productPrice"></form:errors></font></small>
                 </div>
                 <div class="form-group">
-                    <label for="productQty" class="control-label">Product Qty</label> <input type="text" name="productQty" id="productQty" class="form-control"
-                        required <% if(request.getAttribute("product") != null) {
-                        	Product p = (Product) request.getAttribute("product");
-		            		out.write("value=\""+p.getProductQty()+"\"");
-			            } %>>
+                    <label for="productQty" class="control-label">Product Qty</label>
+					<form:input type="text" path="productQty" id="productQty" cssClass="form-control" required="required"/>
+                	<small class="form-text text-muted"><font color="red"><form:errors path="productQty"></form:errors></font></small>
                 </div>
                 <div class="form-group">
                     <label for="productCategory" class="control-label">Product Category</label>
-					<select name="productCategory" id="productCategory" class="form-control">
-					<%
-					List<ProductCategory> pcList = (List<ProductCategory>) request.getAttribute("pcList");
-                    for(ProductCategory pc: pcList) {
-                    	out.write("<option value=\""+pc.getId()+"\" ");
-                    	if(request.getAttribute("product") != null) {
-                    		Product p = (Product) request.getAttribute("product");
-                    		if(p.getCategory().getId() == pc.getId()) {
-                    			out.write("selected");
-                    		}
-                    	}
-                    	out.write(">"+pc.getName()+"</option>");
-                    }
-					%>
-					</select>
+					<form:select path="category.id" id="productCategory" cssClass="form-control">
+						<c:forEach items="${pcList}" var="category">
+							<form:option value="${category.id}">${category.name}</form:option>
+						</c:forEach>
+					</form:select>
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success btn-lg btn-block" value="<%
-		            if(request.getAttribute("product") == null) {
-		            	out.write("Add Product");
-		            } else {
-		            	out.write("Update Product");
-		            }
-		            %>">
+                    <input type="submit" class="btn btn-success btn-lg btn-block" value="${title}">
                 </div>
-            </form>
+            </form:form>
         </div>
     </div>
     </main>
