@@ -32,6 +32,10 @@ Username: customer@gmail.com
 
 Password: user
 
+## Database Schema Diagram
+
+!["Database Schema Diagram"](https://github.com/anantjain6/ProductManagementSystem/blob/master/document/schema.png)
+
 ## Screenshots
 
 #### Home Page
