@@ -3,9 +3,10 @@
 It is a marketplace where customer can place order and Admin can manage inventory of products, view order and generate the report.
 
 ## Technology Used
+-   Maven for Dependency Management
 -   Spring MVC for Web application development
 -   Spring Data JPA for Creating Custom Repository
--   Spring Boot for Autoconfiguration and Dependency Management
+-   Spring Boot for Autoconfiguration
 -   Spring Security for Authentication & Authorisation
 -   Hibernate Validator for form data validation
 -   H2 In-memory Database for Storing data
@@ -16,6 +17,7 @@ It is a marketplace where customer can place order and Admin can manage inventor
 -   Java
 -   Oracle
 -   Apache Tomcat
+-   Maven
 
 ## Configuration
 Change the SMTP details in "EmailConfig"
