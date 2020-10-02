@@ -8,12 +8,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
-import me.anant.PMS.config.EmailConfig;
-
 @Service
 public class EmailService {
+	
+	//Added Autowired For Java MAil Sender
 	@Autowired
-	EmailConfig emailConfig;
+    private JavaMailSender javaMailSender;
 	
 	public void send(String to, String subject, String body) {
 		String template = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n" + 
@@ -32,7 +32,7 @@ public class EmailService {
 				+ "Team PMS"
 				+ "</body>"
 				+ "</html>";
-		JavaMailSender mailSender = emailConfig.getJavaMailSender();
+		
 		 MimeMessagePreparator preparator = new MimeMessagePreparator() {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
@@ -42,6 +42,8 @@ public class EmailService {
                 message.setText(template, true);
             }
         };
-        mailSender.send(preparator);
+        
+        //Replaced EmailConfig with JavaMailSender
+        javaMailSender.send(preparator);
 	}
 }
