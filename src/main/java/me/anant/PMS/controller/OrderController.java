@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import me.anant.PMS.exceptions.OrderNotFoundException;
+import me.anant.PMS.exceptions.ProductNotFoundException;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,7 +51,7 @@ public class OrderController {
 	}
 	
 	@PostMapping("/customer/order_place")
-	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) {
+	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) throws ProductNotFoundException{
 		String[] pIds = request.getParameterValues("productId");
 		Set<OrderProduct> opList = new HashSet<>();
 		for(String pId: pIds) {
@@ -107,21 +109,21 @@ public class OrderController {
 	}
 	
 	@GetMapping("admin/order/detail")
-	public ModelAndView orderDetailAdmin(@RequestParam("id") long id) {
+	public ModelAndView orderDetailAdmin(@RequestParam("id") long id) throws ProductNotFoundException {
 		ModelAndView modelAndView = new ModelAndView("admin/order/detail");
 		modelAndView.addObject("order", orderService.findById(id).get());
 		return modelAndView;
 	}
 	
 	@GetMapping("customer/order/detail")
-	public ModelAndView orderDetailCustomer(@RequestParam("id") long id) {
+	public ModelAndView orderDetailCustomer(@RequestParam("id") long id) throws ProductNotFoundException{
 		ModelAndView modelAndView = new ModelAndView("customer/order/detail");
 		modelAndView.addObject("order", orderService.findById(id).get());
 		return modelAndView;
 	}
 	
 	@GetMapping("customer/order/cancel")
-	public String orderCancel(@RequestParam("id") long id, final RedirectAttributes redirectAttributes) {
+	public String orderCancel(@RequestParam("id") long id, final RedirectAttributes redirectAttributes) throws ProductNotFoundException {
 		if(orderService.cancelOrder(id)) {
 			redirectAttributes.addFlashAttribute("msg", "Order cancelled successfully");
 			redirectAttributes.addFlashAttribute("class", "alert-success");
@@ -133,7 +135,7 @@ public class OrderController {
 	}
 	
 	@PostMapping("admin/order/status")
-	public String changeStatus(@RequestParam("id") long id, @RequestParam("status") String status, final RedirectAttributes redirectAttributes) {
+	public String changeStatus(@RequestParam("id") long id, @RequestParam("status") String status, final RedirectAttributes redirectAttributes) throws OrderNotFoundException, ProductNotFoundException {
 		orderService.changeStatus(id, status);
 		redirectAttributes.addFlashAttribute("msg", "Status of order changed.");
 		redirectAttributes.addFlashAttribute("class", "alert-success");
