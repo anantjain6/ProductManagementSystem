@@ -14,36 +14,35 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
 
     @Autowired
     AuthenticationSuccessHandlerImpl successHandler;
-    
-	@Bean
-	public AuthenticationProvider authProvider() {
-		DaoAuthenticationProvider dap = new DaoAuthenticationProvider();
-		dap.setUserDetailsService(userDetailsService);
-		dap.setPasswordEncoder(new BCryptPasswordEncoder());
-		
-		return dap;
-	}
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public AuthenticationProvider authProvider() {
+        DaoAuthenticationProvider dap = new DaoAuthenticationProvider();
+        dap.setUserDetailsService(userDetailsService);
+        dap.setPasswordEncoder(new BCryptPasswordEncoder());
+        return dap;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        		.antMatchers("/h2-console/**",
-        				"/",
+                .antMatchers("/h2-console/**",
+                        "/",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-        		.antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
                 .antMatchers("/customer/**").access("hasRole('CUSTOMER')")
                 .anyRequest().authenticated()
-                .and().formLogin().successHandler(successHandler);
+                .and()
+                .oauth2Login();
         http.logout()
-        .logoutUrl("/logout")
-        .invalidateHttpSession(true);
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true);
         http.headers().frameOptions().disable();
         http.csrf().disable();
     }
