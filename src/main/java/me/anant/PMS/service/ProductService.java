@@ -22,7 +22,9 @@ public class ProductService {
 		pr.deleteById(id);
 	}
 	public List<Product> get(){
-		return (List<Product>) pr.findAll();
+		List<Product> products = (List<Product>) pr.findAll();
+		products.sort((Product p1, Product p2) -> p1.getProductName().compareTo(p2.getProductName()));
+		return products;
 	}
 	public Optional<Product> findById(Long id) {
 		return pr.findById(id);
