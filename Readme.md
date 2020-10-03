@@ -20,7 +20,7 @@ It is a marketplace where customer can place order and Admin can manage inventor
 -   Maven
 
 ## Configuration
-Change the SMTP details in "EmailConfig"
+Change the SMTP details in "application.properties"
 
 ## Login Details
 
