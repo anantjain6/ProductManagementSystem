@@ -16,15 +16,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    AuthenticationSuccessHandlerImpl successHandler;
-    @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    AuthenticationSuccessHandlerImpl successHandler;
 
     @Bean
     public AuthenticationProvider authProvider() {
         DaoAuthenticationProvider dap = new DaoAuthenticationProvider();
         dap.setUserDetailsService(userDetailsService);
         dap.setPasswordEncoder(new BCryptPasswordEncoder());
+
         return dap;
     }
 
@@ -37,9 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")
                 .antMatchers("/customer/**").access("hasRole('CUSTOMER')")
+                .antMatchers("/customer/**").access("hasRole('USER')")
                 .anyRequest().authenticated()
                 .and()
-                .oauth2Login();
+                .oauth2Login().successHandler(successHandler);
         http.logout()
                 .logoutUrl("/logout")
                 .invalidateHttpSession(true);

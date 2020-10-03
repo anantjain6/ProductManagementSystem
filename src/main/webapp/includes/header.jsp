@@ -11,7 +11,7 @@
         <sec:authorize access="hasRole('ADMIN')">
         	<a class="navbar-brand" href="/admin/product/list">PMS</a>
         </sec:authorize>
-        <sec:authorize access="hasRole('CUSTOMER')">
+        <sec:authorize access="hasRole('CUSTOMER') || hasRole('USER')">
         	<a class="navbar-brand" href="/customer/order_place">PMS</a>
         </sec:authorize>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -27,7 +27,7 @@
                 	<li class="nav-item"><a class="nav-link" href="/admin/product/report">Product Report</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/admin/category/list">Category Report</a></li>
                 </sec:authorize>
-	            <sec:authorize access="hasRole('CUSTOMER')">
+	            <sec:authorize access="hasRole('CUSTOMER') || hasRole('USER')">
                 	<li class="nav-item"><a class="nav-link" href="/customer">Place Order</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/customer/order/list">My Orders</a></li>
                 </sec:authorize>
