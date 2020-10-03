@@ -42,6 +42,7 @@
 	                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 	                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <sec:authentication property="name"/> </a>
 	                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+	                    	<a class="dropdown-item" href="/user/change-password">Change Password</a>
 	                        <a class="dropdown-item" href="/logout">Logout</a>
 	                    </div>
 	                </li>
