@@ -34,7 +34,6 @@ public class EmailService {
 				message.setText(template, true);
 
 				message.addAttachment("invoice.pdf", new File("invoice.pdf"));
-
 			}
 		};
 
