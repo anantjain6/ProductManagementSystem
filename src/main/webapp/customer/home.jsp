@@ -28,7 +28,7 @@
 	                        <tr>
 	                            <td><input type="checkbox" name="productId" value="<%=p.getProductId()%>"></td>
 	                            <td><%=p.getProductName()%></td>
-	                            <td>Rs. <%= p.getProductPrice() %></td>
+	                            <td>Rs. <s><%= p.getProductPrice() %></s> <%= p.getProductSellingPrice() %></td>
 	                            <td>
 	                            	<select class="form-control" name="<%=p.getProductId()%>">
 	                            		<%

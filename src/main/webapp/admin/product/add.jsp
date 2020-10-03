@@ -37,6 +37,11 @@
                 	<small class="form-text text-muted"><font color="red"><form:errors path="productPrice"></form:errors></font></small>
                 </div>
                 <div class="form-group">
+                    <label for="sellingPrice" class="control-label">Selling Price</label>
+                    <form:input type="text" path="productSellingPrice" id="sellingPrice"  cssClass="form-control" required="required"/>
+                    <small class="form-text text-muted"><font color="red"><form:errors path="productSellingPrice"></form:errors></font></small>
+                </div>
+                <div class="form-group">
                     <label for="productQty" class="control-label">Product Qty</label>
 					<form:input type="text" path="productQty" id="productQty" cssClass="form-control" required="required"/>
                 	<small class="form-text text-muted"><font color="red"><form:errors path="productQty"></form:errors></font></small>

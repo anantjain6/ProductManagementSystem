@@ -38,7 +38,7 @@
                             int count = 0;
                             Set<OrderProduct> opList = o.getOrderProduct();
                             for(OrderProduct op: opList) {
-                            	sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
+                            	sum = sum + op.getProduct().getProductSellingPrice() * op.getBuyqty();
                             	count++;
                             }
                             %>

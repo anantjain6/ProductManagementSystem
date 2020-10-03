@@ -21,7 +21,8 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">Product price</th>
+                        <th scope="col">Selling price</th>
                         <th scope="col">Qty</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -36,6 +37,7 @@
                             <th scope="row"><%=p.getProductId()%></th>
                             <td><%=p.getProductName()%></td>
                             <td>Rs. <%= p.getProductPrice() %></td>
+                            <td>Rs. <%= p.getProductSellingPrice() %></td>
                             <td><%= p.getProductQty() %></td>
                             <td>
                             <a class="btn btn-success" href="update?id=<%=p.getProductId()%>" role="button">Edit</a>
