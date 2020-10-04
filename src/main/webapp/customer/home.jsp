@@ -14,7 +14,9 @@
 	            <table class="table table-hover">
 	                <thead>
 	                    <tr>
+	                    	<th scope="col"></th>
 	                        <th scope="col">Name</th>
+	                        <th scope="col">Product Image</th>
 	                        <th scope="col">Price</th>
 	                        <th scope="col">Qty</th>
 	                    </tr>
@@ -28,6 +30,9 @@
 	                        <tr>
 	                            <td><input type="checkbox" name="productId" value="<%=p.getProductId()%>"></td>
 	                            <td><%=p.getProductName()%></td>
+	                            <td>
+	                            	<img src="<%=p.getImageName() %>" alt="Not Available" width="200" height="200" id="preview" class="img-thumbnail">
+	                            </td>
 	                            <td>Rs. <%= p.getProductPrice() %></td>
 	                            <td>
 	                            	<select class="form-control" name="<%=p.getProductId()%>">

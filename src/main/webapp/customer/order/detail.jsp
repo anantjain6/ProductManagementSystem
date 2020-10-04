@@ -24,6 +24,7 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
+                        <th scope="col"></th>
                         <th scope="col">Price</th>
                         <th scope="col">Qty</th>
                         <th scope="col">Amount</th>
@@ -39,6 +40,8 @@
                         <tr>
                             <th scope="row"><%=op.getProduct().getProductId()%></th>
                             <td><%=op.getProduct().getProductName()%></td>
+                            
+                            <td><img src="${pageContext.request.contextPath}/<%=op.getProduct().getImageName()%>" width="200" height="200" id="preview" class="img-thumbnail"/></td>
                             <td>Rs. <%= op.getProduct().getProductPrice() %></td>
                             <td><%= op.getBuyqty() %></td>
                             <td>Rs. <%= op.getBuyqty() * op.getProduct().getProductPrice() %></td>
