@@ -6,8 +6,8 @@ INSERT INTO PRODUCT_CATEGORY (id, NAME) VALUES
 (1, 'Fruit & Vegetable'),
 (2, 'Garment');
 
-INSERT INTO PRODUCT(PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QTY, CATEGORY_ID) VALUES 
-(101, 'Apple', '20.5', 11, 1),
-(102, 'Orange', '10.25', 22, 1),
-(103, 'Shirt', '220.35', 33, 2),
-(104, 'Pant', '410.25', 44, 2);
+INSERT INTO PRODUCT(PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QTY, IMAGE_NAME, CATEGORY_ID) VALUES 
+(101, 'Apple', '20.5', 11, '', 1),
+(102, 'Orange', '10.25', 22, '', 1),
+(103, 'Shirt', '220.35', 33, '', 2),
+(104, 'Pant', '410.25', 44, '', 2);
