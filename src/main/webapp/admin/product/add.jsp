@@ -23,9 +23,36 @@
             <h2 class="float-left">${title}</h2>
         </div>
         <div class="card-body">
-            <form:form action="${action}" method="post">
+            <form:form action="${action}" enctype="multipart/form-data" method="post" >
             	<form:input type="hidden" path="productId"/>
             	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                
+                <div class="form-group">
+                	<div class="form-group row">
+	                	<div class="col-sm-6">
+	                		<a href="#" id="pop">
+	                          <img src="https://placehold.it/200x200" width="200" height="200" id="preview" class="img-thumbnail">
+	                        </a>
+	                	</div>
+	                	
+	                	<div class="col-sm-6">
+		                    <lable for="file" class="custom-control">Product Picture</label>
+	                          <input type="file" name="imageFile" class="file" accept="image/*" />
+	                          
+	                          <div class="input-group">
+	                            <input type="text" class="form-control" placeholder="Upload File" id="file" disabled>
+	                            <div class="input-group-append">
+	                              <button type="button" class="browse btn btn-primary disabled" id="capture">Browse</button>
+	                            </div>
+	                            <small class="form-text text-muted"><font color="red"><form:errors path="productName"></form:errors></font></small>
+	                          </div>
+		                    
+							<%-- <form:input type="text" path="productImage" id="productImage" cssClass="form-control" required="required"/> --%>
+		                	
+	                	</div>
+                	</div>
+                </div>
+                
                 <div class="form-group">
                     <label for="productName" class="control-label">Product Name</label>
 					<form:input type="text" path="productName" id="productName" cssClass="form-control" required="required"/>
