@@ -2,6 +2,7 @@ package me.anant.PMS.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,10 @@ public class ProductService {
 		int newQty = product.getProductQty() + qty;
 		product.setProductQty(newQty);
 		pr.save(product);
+	}
+	public List<Product> getAvailableProducts() {
+		return get()
+		.stream().filter(p -> p.getProductQty() > 0)
+		.collect(Collectors.toList());
 	}
 }

@@ -23,9 +23,7 @@ public class HomeController {
 	
 	@GetMapping("/customer")
 	public ModelAndView customerHome() {
-		List<Product> pList =  productService.get()
-				.stream().filter(p -> p.getProductQty() > 0)
-				.collect(Collectors.toList());
+		List<Product> pList =  productService.getAvailableProducts();
 		ModelAndView modelAndView = new ModelAndView("customer/home");
 		modelAndView.addObject("pList", pList);
 		return modelAndView;
