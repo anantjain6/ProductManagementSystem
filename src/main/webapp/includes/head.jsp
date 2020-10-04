@@ -42,4 +42,9 @@
 #myBtn:hover {
   background-color: #555; /* Add a dark-grey background on hover */
 }
+
+.file {
+  visibility: hidden;
+  position: absolute;
+}
 </style>
