@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class OrderProduct implements Serializable {
+public class OrderProduct implements Serializable, Comparable<OrderProduct> {
 	@Id
     @ManyToOne
     @JoinColumn
@@ -72,4 +72,9 @@ public class OrderProduct implements Serializable {
         		buyqty
         );
     }
+
+	@Override
+	public int compareTo(OrderProduct o) {
+		return this.product.compareTo(o.getProduct());
+	}
 }

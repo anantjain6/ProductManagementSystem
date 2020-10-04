@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Product {
+public class Product implements Comparable<Product>{
 	@Id
 	@GeneratedValue
 	long productId;
@@ -103,6 +103,11 @@ public class Product {
 
 	public void setCategory(ProductCategory category) {
 		this.category = category;
+	}
+
+	@Override
+	public int compareTo(Product o) {
+		return this.productName.compareTo(o.getProductName());
 	}
 	
 }

@@ -1,5 +1,6 @@
 package me.anant.PMS.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class ProductService {
 	}
 	public List<Product> get(){
 		List<Product> products = (List<Product>) pr.findAll();
-		products.sort((Product p1, Product p2) -> p1.getProductName().compareTo(p2.getProductName()));
+		Collections.sort(products);
 		return products;
 	}
 	public Optional<Product> findById(Long id) {

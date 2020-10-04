@@ -2,9 +2,13 @@ package me.anant.PMS.controller;
 
 import java.awt.Dialog.ModalExclusionType;
 import java.security.Principal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,7 +55,7 @@ public class OrderController {
 	@PostMapping("/customer/order_place")
 	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) {
 		String[] pIds = request.getParameterValues("productId");
-		Set<OrderProduct> opList = new HashSet<>();
+		Set<OrderProduct> opList = new TreeSet<>();
 		for(String pId: pIds) {
 			long pid = Long.parseLong(pId);
 			Product product = productService.findById(pid).get();
@@ -71,6 +75,8 @@ public class OrderController {
 				"<th>Amount</th>" + 
 				"</tr>";
 		float sum = 0;
+		
+		
 		for (OrderProduct op : opList)
 		{
 			sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
