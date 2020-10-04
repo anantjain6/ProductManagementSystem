@@ -1,6 +1,7 @@
 package me.anant.PMS.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,9 @@ public class HomeController {
 	
 	@GetMapping("/customer")
 	public ModelAndView customerHome() {
-		List<Product> pList =  productService.get();
+		List<Product> pList =  productService.get()
+				.stream().filter(p -> p.getProductQty() > 0)
+				.collect(Collectors.toList());
 		ModelAndView modelAndView = new ModelAndView("customer/home");
 		modelAndView.addObject("pList", pList);
 		return modelAndView;

@@ -1,14 +1,13 @@
 package me.anant.PMS.controller;
 
-import java.awt.Dialog.ModalExclusionType;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +41,9 @@ public class OrderController {
 	
 	@GetMapping("/customer/order_place")
 	public ModelAndView customerHome() {
-		List<Product> pList =  productService.get();
+		List<Product> pList =  productService.get()
+				.stream().filter(p -> p.getProductQty() > 0)
+				.collect(Collectors.toList());
 		ModelAndView modelAndView = new ModelAndView("customer/home");
 		modelAndView.addObject("pList", pList);
 		return modelAndView;
