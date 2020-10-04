@@ -34,6 +34,8 @@ public class Product {
 	@Max(value=50, message="Product quantity can be maximum 50.")
 	int productQty;
 	
+	String imageName;
+	
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     Set<OrderProduct> orderProduct;
 
@@ -49,12 +51,13 @@ public class Product {
 		this.productId = productId;
 	}
 
-	public Product(String productName, float productPrice, int productQty, ProductCategory category) {
+	public Product(String productName, float productPrice, int productQty, ProductCategory category, String imageName) {
 		super();
 		this.productName = productName;
 		this.productPrice = productPrice;
 		this.productQty = productQty;
 		this.category = category;
+		this.imageName = imageName;
 	}
 
 	public long getProductId() {
@@ -104,5 +107,15 @@ public class Product {
 	public void setCategory(ProductCategory category) {
 		this.category = category;
 	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+	
+	
 	
 }
