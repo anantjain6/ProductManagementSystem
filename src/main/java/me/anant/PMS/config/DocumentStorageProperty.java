@@ -16,5 +16,4 @@ public class DocumentStorageProperty {
 	public void setUploadDirectory(String uploadDirectory) {
 		this.uploadDirectory = uploadDirectory;
 	}
-
 }
