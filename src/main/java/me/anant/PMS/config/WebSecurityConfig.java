@@ -10,16 +10,28 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
 
     @Autowired
     AuthenticationSuccessHandlerImpl successHandler;
+    
+    
+    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {"classpath:/static/", "classpath:/product-img/" };
+    
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+        .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS)
+        .setCachePeriod(0);
+    }
     
 	@Bean
 	public AuthenticationProvider authProvider() {
@@ -35,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
         		.antMatchers("/h2-console/**",
         				"/",
-                        "/**/*.css",
+        				"/**/*.css",
                         "/**/*.js").permitAll()
         		.antMatchers("/admin/**").access("hasRole('ADMIN')")
                 .antMatchers("/customer/**").access("hasRole('CUSTOMER')")
