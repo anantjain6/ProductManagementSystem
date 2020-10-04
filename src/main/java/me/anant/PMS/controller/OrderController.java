@@ -1,6 +1,5 @@
 package me.anant.PMS.controller;
 
-import java.awt.Dialog.ModalExclusionType;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
@@ -8,9 +7,9 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,18 +27,24 @@ import me.anant.PMS.service.UserService;
 
 @Controller
 public class OrderController {
-	@Autowired
-	ProductService productService;
-	
-	@Autowired
-	UserService userService;
-	
-	@Autowired
-	OrderService orderService;
-	
-	@Autowired
-	EmailService emailService;
-	
+	private final ProductService productService;
+
+	private final UserService userService;
+
+	private final OrderService orderService;
+
+	private final EmailService emailService;
+
+	private final TransactionTemplate transactionTemplate;
+
+	public OrderController(ProductService productService, UserService userService, OrderService orderService, EmailService emailService, TransactionTemplate transactionTemplate) {
+		this.productService = productService;
+		this.userService = userService;
+		this.orderService = orderService;
+		this.emailService = emailService;
+		this.transactionTemplate = transactionTemplate;
+	}
+
 	@GetMapping("/customer/order_place")
 	public ModelAndView customerHome() {
 		List<Product> pList =  productService.get();
@@ -50,46 +55,55 @@ public class OrderController {
 	
 	@PostMapping("/customer/order_place")
 	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) {
-		String[] pIds = request.getParameterValues("productId");
+	return	transactionTemplate.execute(status -> {
+			String[] pIds = request.getParameterValues("productId");
+			Set<OrderProduct> opList = getOrderProducts(request, pIds);
+			User user = userService.findByEmail(principal.getName());
+			orderService.save(new Order(user, "PROCESSING", opList));
+
+			String message = "Hello,<br><br>Your order has been placed successfuly. Following is the detail of your order.<br><br>"
+					+ "<table>" +
+					"<tr>" +
+					"<th>Name</th>" +
+					"<th>Price</th>" +
+					"<th>Qty</th>" +
+					"<th>Amount</th>" +
+					"</tr>";
+			float sum = 0;
+			for (OrderProduct op : opList)
+			{
+				sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
+				message = message + "<tr>" +
+						"<td>"+op.getProduct().getProductName()+"</td>" +
+						"<td>Rs. "+op.getProduct().getProductPrice()+"</td>" +
+						"<td>"+op.getBuyqty()+"</td>" +
+						"<td>Rs. "+op.getProduct().getProductPrice() * op.getBuyqty()+"</td>" +
+						"</tr>";
+			}
+			message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. "+sum+"</td></tr>" +
+					"</table>";
+			emailService.send(principal.getName(), "Order Placed successfully", message);
+
+			ModelAndView modelAndView = new ModelAndView("customer/order_place");
+			modelAndView.addObject("opList", opList);
+			return modelAndView;
+		});
+	}
+	public Set<OrderProduct> getOrderProducts(HttpServletRequest request, String[] pIds) {
 		Set<OrderProduct> opList = new HashSet<>();
 		for(String pId: pIds) {
+			Product product = null;
 			long pid = Long.parseLong(pId);
-			Product product = productService.findById(pid).get();
+			if(productService.findById(pid).isPresent()){
+				product = productService.findById(pid).get();
+			}
 			int buyqty = Integer.parseInt(request.getParameter(pId));
 			opList.add(new OrderProduct(product, buyqty));
 			productService.deductQty(pid, buyqty);
 		}
-		User user = userService.findByEmail(principal.getName());
-		orderService.save(new Order(user, "PROCESSING", opList));
-		
-		String message = "Hello,<br><br>Your order has been placed successfuly. Following is the detail of your order.<br><br>"
-				+ "<table>" + 
-				"<tr>" + 
-				"<th>Name</th>" + 
-				"<th>Price</th>" + 
-				"<th>Qty</th>" + 
-				"<th>Amount</th>" + 
-				"</tr>";
-		float sum = 0;
-		for (OrderProduct op : opList)
-		{
-			sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
-			message = message + "<tr>" + 
-					"<td>"+op.getProduct().getProductName()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice()+"</td>" + 
-					"<td>"+op.getBuyqty()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice() * op.getBuyqty()+"</td>" + 
-					"</tr>";
-		}
-		message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. "+sum+"</td></tr>" + 
-				"</table>";
-		emailService.send(principal.getName(), "Order Placed successfully", message);
-		
-		ModelAndView modelAndView = new ModelAndView("customer/order_place");
-		modelAndView.addObject("opList", opList);
-		return modelAndView;
+		return opList;
 	}
-	
+
 	@GetMapping("customer/order/list")
 	public ModelAndView viewMyOrder(Principal principal) {
 		User user = userService.findByEmail(principal.getName());
