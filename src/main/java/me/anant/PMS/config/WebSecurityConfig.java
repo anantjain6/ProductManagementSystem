@@ -23,7 +23,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     @Autowired
     AuthenticationSuccessHandlerImpl successHandler;
     
-    
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {"classpath:/static/", "classpath:/product-img/" };
     
     @Override
