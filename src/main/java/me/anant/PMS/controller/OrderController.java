@@ -111,7 +111,13 @@ public class OrderController {
 		modelAndView.addObject("opList", opList);
 		return modelAndView;
 	}
-	
+
+	/**
+	 * This Get api is responsible to View Customer's Order.
+	 *
+	 * @param principal
+	 * @return ModelAndView
+	 */
 	@GetMapping("customer/order/list")
 	public ModelAndView viewMyOrder(Principal principal) {
 		User user = userService.findByEmail(principal.getName());
