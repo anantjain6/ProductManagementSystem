@@ -1,12 +1,15 @@
 package me.anant.PMS.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 public class ProductNotFoundException extends Exception {
 
-    private String message;
+    private String errorMessage;
 
     public ProductNotFoundException(String message){
         super(message);
-        this.message = message;
+        this.errorMessage = message;
     }
 
 }

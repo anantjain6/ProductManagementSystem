@@ -45,7 +45,7 @@ public class ProductService {
 	public Optional<Product> findById(long id) throws ProductNotFoundException {
 		Optional<Product> optionalProduct = pr.findById(id);
 		if (!optionalProduct.isPresent()) {
-			throw new ProductNotFoundException("Product is not present in Inventory");
+			throw new ProductNotFoundException("Product not available");
 		}
 		return optionalProduct;
 	}
