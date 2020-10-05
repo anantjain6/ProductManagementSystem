@@ -27,7 +27,7 @@ public class ProductCategoryController {
 
 	/**
 	 * This GET api is responsible to view the categories of a Product which is used by Admin.
-	 * @return
+	 * @return ModelAndView
 	 */
 	@GetMapping("admin/category/list")
 	public ModelAndView categoryList() {
@@ -39,7 +39,7 @@ public class ProductCategoryController {
 	/**
 	 * This GET api is responsible to generate the report used by Admin.
 	 * @param id ModelAndView
-	 * @return
+	 * @return ModelAndView
 	 */
 	@GetMapping("admin/category/report")
 	public ModelAndView report(@RequestParam("id") long id) {

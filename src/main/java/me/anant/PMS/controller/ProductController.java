@@ -49,7 +49,7 @@ public class ProductController {
 	 * @param result
 	 * @param model
 	 * @param redirectAttributes
-	 * @return String containing Message
+	 * @return String redirect path
 	 */
 	@PostMapping("/admin/product/add")
 	public String add(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
@@ -62,7 +62,11 @@ public class ProductController {
 		redirectAttributes.addFlashAttribute("class", "alert-success");
 		return "redirect:/admin/product/add";
 	}
-	
+
+	/**
+	 * This Get api is responsible to view Product List
+	 * @return ModelAndView
+	 */
 	@GetMapping("/admin/product/list")
 	public ModelAndView list() {
 		List<Product> pList = productService.get();
@@ -75,7 +79,7 @@ public class ProductController {
 	 * This GET api is responsible to delete the product.
 	 * @param id
 	 * @param redirectAttributes
-	 * @return
+	 * @return redirect path
 	 */
 	@GetMapping("/admin/product/delete")
 	public String list(@RequestParam("id") long id,
@@ -107,7 +111,7 @@ public class ProductController {
 	 * @param result
 	 * @param model
 	 * @param redirectAttributes
-	 * @return String containing message
+	 * @return String redirect path
 	 */
 	@PostMapping("/admin/product/update")
 	public String updateView(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
@@ -123,7 +127,7 @@ public class ProductController {
 
 	/**
 	 * This api is responsible to generate report related to Product.
-	 * @return
+	 * @return ModelAndView
 	 */
 	@GetMapping("/admin/product/report")
 	public ModelAndView report() {

@@ -128,7 +128,7 @@ public class OrderController {
 
 	/**
 	 * This GET api is responsible to List All Orders.
-	 * @return
+	 * @return ModelAnndView
 	 */
 	@GetMapping("admin/order/list")
 	public ModelAndView viewAllOrder() {
@@ -168,7 +168,7 @@ public class OrderController {
 	 * This GET api is responsible to cancel an Order.
 	 * @param id
 	 * @param redirectAttributes
-	 * @return String containing message
+	 * @return String redirect path
 	 */
 	@GetMapping("customer/order/cancel")
 	public String orderCancel(@RequestParam("id") long id, final RedirectAttributes redirectAttributes) {
@@ -187,7 +187,7 @@ public class OrderController {
 	 * @param id
 	 * @param status
 	 * @param redirectAttributes
-	 * @return String {Message containing "status of order changed"}
+	 * @return String redirect path
 	 */
 	@PostMapping("admin/order/status")
 	public String changeStatus(@RequestParam("id") long id, @RequestParam("status") String status, final RedirectAttributes redirectAttributes) {
