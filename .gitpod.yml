@@ -4,4 +4,4 @@ ports:
   onOpen: open-preview
 # start up tasks
 tasks:
-- command: ./mvnw spring-boot:run
+- command: mvn spring-boot:run
