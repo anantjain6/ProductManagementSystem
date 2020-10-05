@@ -2,9 +2,9 @@ package me.anant.PMS.controller;
 
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
 
+import me.anant.PMS.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,7 +66,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/admin/product/update")
-	public ModelAndView updateView(long id) {
+	public ModelAndView updateView(long id) throws ProductNotFoundException {
 		Optional<Product> optional = productService.findById(id);
 		Product product = optional.get();
 		ModelAndView modelAndView = new ModelAndView("admin/product/add");
