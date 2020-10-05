@@ -1,6 +1,6 @@
 # Product Management System
 
-[![Open in GitPod](https://img.shields.io/badge/Gitpod-ready_to_code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
+[![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
 
 It is a marketplace where customer can place order and Admin can manage inventory of products, view order and generate the report.
 
