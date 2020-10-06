@@ -22,6 +22,13 @@ import me.anant.PMS.model.Product;
 import me.anant.PMS.model.ProductCategory;
 import me.anant.PMS.service.ProductCategoryService;
 
+/**
+ * This ProductCategoryController is responsible to :
+ * <ul>
+ *     <li>View the categories of a Product</li>
+ *     <li>Generate the report of Product and its Categories</li>
+ * </ul>
+ */
 @Controller
 public class ProductCategoryController {
 	@Autowired
@@ -82,6 +89,10 @@ public class ProductCategoryController {
 		return "redirect:/admin/product_category/list";
 	}
 
+	/**
+	 * This GET api is responsible to view the categories of a Product which is used by Admin.
+	 * @return ModelAndView
+	 */
 	@GetMapping("admin/category/list")
 	public ModelAndView categoryList() {
 		ModelAndView modelAndView = new ModelAndView("admin/category/list");
@@ -89,6 +100,11 @@ public class ProductCategoryController {
 		return modelAndView;
 	}
 
+	/**
+	 * This GET api is responsible to generate the report used by Admin.
+	 * @param id ModelAndView
+	 * @return ModelAndView
+	 */
 	@GetMapping("admin/category/report")
 	public ModelAndView report(@RequestParam("id") long id) {
 		Set<Product> pSet = categoryService.findById(id).get().getProducts();

@@ -1,5 +1,7 @@
 # Product Management System
 
+[![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
+
 It is a marketplace where customer can place order and Admin can manage inventory of products, view order and generate the report.
 
 ## Technology Used
@@ -20,7 +22,7 @@ It is a marketplace where customer can place order and Admin can manage inventor
 -   Maven
 
 ## Configuration
-Change the SMTP details in "EmailConfig"
+Change the SMTP details in "application.properties"
 
 ## Login Details
 

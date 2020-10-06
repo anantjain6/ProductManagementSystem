@@ -8,7 +8,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
+import me.anant.PMS.exceptions.OrderNotFoundException;
+import me.anant.PMS.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,18 @@ import me.anant.PMS.service.OrderService;
 import me.anant.PMS.service.ProductService;
 import me.anant.PMS.service.UserService;
 
+/**
+ * This Order Controller has rest endpoints which are responsible to perform following functionalities :
+ * <ul>
+ *     <li>Place an order</li>
+ *     <li>View Order</li>
+ *     <li>View All Orders - Used By Admin</li>
+ *     <li>View Order Details Of a particular Customer</li>
+ *     <li>Change Order Status</li>
+ *     <li>Cancel an Order</li>
+ * </ul>
+ *
+ */
 @Controller
 public class OrderController {
 	@Autowired
@@ -39,7 +52,11 @@ public class OrderController {
 	
 	@Autowired
 	EmailService emailService;
-	
+
+	/**
+	 * This GET api is responsible to view the home screen for Place Orders
+	 * @return ModelAndView
+	 */
 	@GetMapping("/customer/order_place")
 	public ModelAndView customerHome() {
 		List<Product> pList =  productService.get();
@@ -47,9 +64,15 @@ public class OrderController {
 		modelAndView.addObject("pList", pList);
 		return modelAndView;
 	}
-	
+
+	/**
+	 * This POST api is responsible to place an Order
+	 * @param request
+	 * @param principal
+	 * @return ModelAndView
+	 */
 	@PostMapping("/customer/order_place")
-	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) {
+	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) throws ProductNotFoundException{
 		String[] pIds = request.getParameterValues("productId");
 		Set<OrderProduct> opList = new HashSet<>();
 		for(String pId: pIds) {
@@ -89,7 +112,13 @@ public class OrderController {
 		modelAndView.addObject("opList", opList);
 		return modelAndView;
 	}
-	
+
+	/**
+	 * This Get api is responsible to View Customer's Order.
+	 *
+	 * @param principal
+	 * @return ModelAndView
+	 */
 	@GetMapping("customer/order/list")
 	public ModelAndView viewMyOrder(Principal principal) {
 		User user = userService.findByEmail(principal.getName());
@@ -97,7 +126,11 @@ public class OrderController {
 		modelAndView.addObject("orderList", user.getOrders());
 		return modelAndView;
 	}
-	
+
+	/**
+	 * This GET api is responsible to List All Orders.
+	 * @return ModelAnndView
+	 */
 	@GetMapping("admin/order/list")
 	public ModelAndView viewAllOrder() {
 		List<Order> oList = orderService.get();
@@ -105,23 +138,41 @@ public class OrderController {
 		modelAndView.addObject("oList", oList);
 		return modelAndView;
 	}
-	
+
+	/**
+	 * This GET api is responsible to view the details of an Order.
+	 * This feature is used by Admin Module.
+	 * @param id
+	 * @return ModelAndView
+	 */
 	@GetMapping("admin/order/detail")
-	public ModelAndView orderDetailAdmin(@RequestParam("id") long id) {
+	public ModelAndView orderDetailAdmin(@RequestParam("id") long id) throws ProductNotFoundException {
 		ModelAndView modelAndView = new ModelAndView("admin/order/detail");
 		modelAndView.addObject("order", orderService.findById(id).get());
 		return modelAndView;
 	}
-	
+
+	/**
+	 * This GET api is responsible to view the details of an order by passing Order Id.
+	 * This api is used by Customer Module.
+	 * @param id
+	 * @return ModelAndView
+	 */
 	@GetMapping("customer/order/detail")
-	public ModelAndView orderDetailCustomer(@RequestParam("id") long id) {
+	public ModelAndView orderDetailCustomer(@RequestParam("id") long id) throws ProductNotFoundException{
 		ModelAndView modelAndView = new ModelAndView("customer/order/detail");
 		modelAndView.addObject("order", orderService.findById(id).get());
 		return modelAndView;
 	}
-	
+
+	/**
+	 * This GET api is responsible to cancel an Order.
+	 * @param id
+	 * @param redirectAttributes
+	 * @return String redirect path
+	 */
 	@GetMapping("customer/order/cancel")
-	public String orderCancel(@RequestParam("id") long id, final RedirectAttributes redirectAttributes) {
+	public String orderCancel(@RequestParam("id") long id, final RedirectAttributes redirectAttributes) throws ProductNotFoundException {
 		if(orderService.cancelOrder(id)) {
 			redirectAttributes.addFlashAttribute("msg", "Order cancelled successfully");
 			redirectAttributes.addFlashAttribute("class", "alert-success");
@@ -131,9 +182,16 @@ public class OrderController {
 		}
 		return "redirect:/customer/order/list";
 	}
-	
+
+	/**
+	 * This POST api changeStatus is responsible to change the status of an Order.
+	 * @param id
+	 * @param status
+	 * @param redirectAttributes
+	 * @return String redirect path
+	 */
 	@PostMapping("admin/order/status")
-	public String changeStatus(@RequestParam("id") long id, @RequestParam("status") String status, final RedirectAttributes redirectAttributes) {
+	public String changeStatus(@RequestParam("id") long id, @RequestParam("status") String status, final RedirectAttributes redirectAttributes) throws OrderNotFoundException, ProductNotFoundException {
 		orderService.changeStatus(id, status);
 		redirectAttributes.addFlashAttribute("msg", "Status of order changed.");
 		redirectAttributes.addFlashAttribute("class", "alert-success");
