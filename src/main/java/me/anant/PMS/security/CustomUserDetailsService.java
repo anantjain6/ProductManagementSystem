@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import me.anant.PMS.model.Password;
 import me.anant.PMS.model.User;
 import me.anant.PMS.dao.UserRepository;
 
