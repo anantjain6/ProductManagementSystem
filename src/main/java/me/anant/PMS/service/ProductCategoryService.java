@@ -15,6 +15,14 @@ public class ProductCategoryService {
 	@Autowired
 	ProductCategoryRepository pcr;
 	
+	public void save(ProductCategory productCategory) {
+		pcr.save(productCategory);
+	}
+
+	public void delete(Long id){
+		pcr.deleteById(id);
+	}
+
 	public List<ProductCategory> get(){
 		return (List<ProductCategory>) pcr.findAll();
 	}

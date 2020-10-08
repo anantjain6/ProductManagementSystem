@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import me.anant.PMS.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +32,8 @@ public class OrderService {
 	public List<Order> get(){
 		return (List<Order>) or.findAll();
 	}
-	public Optional<Order> findById(Long id) {
-		return or.findById(id);
-	}
-	public boolean cancelOrder(long id) {
+
+	public boolean cancelOrder(long id) throws ProductNotFoundException {
 		Order order = this.findById(id).get();
 		LocalDateTime ldt1 = order.getCreateDateTime();
 		LocalDateTime ldt2 = LocalDateTime.now();
@@ -53,7 +52,7 @@ public class OrderService {
 			 return false;
 		}
 	}
-	public void changeStatus(long id, String status) {
+	public void changeStatus(long id, String status) throws ProductNotFoundException {
 		Order order = this.findById(id).get();
 		if(status.equals("REJECT")) {
 			for(OrderProduct op: order.getOrderProduct()) {
@@ -62,5 +61,13 @@ public class OrderService {
 		}
 		order.setStatus(status);
 		or.save(order);
+	}
+
+	public Optional<Order> findById(Long id) throws ProductNotFoundException {
+		Optional<Order> optionalOrder = or.findById(id);
+		if (!optionalOrder.isPresent()) {
+			throw new ProductNotFoundException("Order not found within the system");
+		}
+		return optionalOrder;
 	}
 }
