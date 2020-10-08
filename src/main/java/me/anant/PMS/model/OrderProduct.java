@@ -8,6 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+/**
+ * Domain model describing OrderProduct mapping.
+ * This represents mapping between an Order and its corresponding product.
+ */
 @Entity
 public class OrderProduct implements Serializable {
 	@Id

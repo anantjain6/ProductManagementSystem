@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * Domain Model describing User and its attributes.
+ */
 @Entity
 public class User {
 	@Id

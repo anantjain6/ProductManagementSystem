@@ -15,6 +15,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+/**
+ * Domain model describing Order Entity.
+ */
 @Entity
 @Table(name = "orders")
 public class Order {
