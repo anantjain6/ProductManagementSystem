@@ -8,9 +8,13 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import me.anant.PMS.Helper.EmailHelper;
+import me.anant.PMS.Helper.ModelAndViewProviderHelper;
+import me.anant.PMS.RequestMappingConstants.ViewConstants;
 import me.anant.PMS.exceptions.OrderNotFoundException;
 import me.anant.PMS.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,17 +45,25 @@ import me.anant.PMS.service.UserService;
  */
 @Controller
 public class OrderController {
-	@Autowired
+
 	ProductService productService;
-	
-	@Autowired
 	UserService userService;
-	
-	@Autowired
 	OrderService orderService;
-	
-	@Autowired
-	EmailService emailService;
+	EmailHelper emailHelper;
+	ModelAndViewProviderHelper modelAndViewProviderHelper;
+
+
+	public OrderController(ProductService productService,
+						   UserService userService,OrderService orderService,
+						   @Lazy(value = true) EmailHelper emailHelper,
+							ModelAndViewProviderHelper modelAndViewProviderHelper)
+	{
+		this.productService=productService;
+		this.userService=userService;
+		this.orderService=orderService;
+		this.emailHelper=emailHelper;
+		this.modelAndViewProviderHelper=modelAndViewProviderHelper;
+	}
 
 	/**
 	 * This GET api is responsible to view the home screen for Place Orders
@@ -60,9 +72,8 @@ public class OrderController {
 	@GetMapping("/customer/order_place")
 	public ModelAndView customerHome() {
 		List<Product> pList =  productService.get();
-		ModelAndView modelAndView = new ModelAndView("customer/home");
-		modelAndView.addObject("pList", pList);
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.CUSTOMER_HOME_PAGE,"pList",pList);
+
 	}
 
 	/**
@@ -74,44 +85,15 @@ public class OrderController {
 	@PostMapping("/customer/order_place")
 	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) throws ProductNotFoundException{
 		String[] pIds = request.getParameterValues("productId");
-		Set<OrderProduct> opList = new HashSet<>();
-		for(String pId: pIds) {
-			long pid = Long.parseLong(pId);
-			Product product = productService.findById(pid).get();
-			int buyqty = Integer.parseInt(request.getParameter(pId));
-			opList.add(new OrderProduct(product, buyqty));
-			productService.deductQty(pid, buyqty);
-		}
+		Set<OrderProduct> opList=this.orderService.createOrderedProduct(pIds,request);
 		User user = userService.findByEmail(principal.getName());
 		orderService.save(new Order(user, "PROCESSING", opList));
-		
-		String message = "Hello,<br><br>Your order has been placed successfuly. Following is the detail of your order.<br><br>"
-				+ "<table>" + 
-				"<tr>" + 
-				"<th>Name</th>" + 
-				"<th>Price</th>" + 
-				"<th>Qty</th>" + 
-				"<th>Amount</th>" + 
-				"</tr>";
-		float sum = 0;
-		for (OrderProduct op : opList)
-		{
-			sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
-			message = message + "<tr>" + 
-					"<td>"+op.getProduct().getProductName()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice()+"</td>" + 
-					"<td>"+op.getBuyqty()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice() * op.getBuyqty()+"</td>" + 
-					"</tr>";
-		}
-		message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. "+sum+"</td></tr>" + 
-				"</table>";
-		emailService.send(principal.getName(), "Order Placed successfully", message);
-		
-		ModelAndView modelAndView = new ModelAndView("customer/order_place");
-		modelAndView.addObject("opList", opList);
-		return modelAndView;
+
+		this.emailHelper.sendSuccessfulOrderEmail(principal, opList);
+		return this.modelAndViewProviderHelper.
+				generateModelAndView(ViewConstants.CUSTOMER_ORDER_PLACE,"opList",opList);
 	}
+
 
 	/**
 	 * This Get api is responsible to View Customer's Order.
@@ -122,9 +104,8 @@ public class OrderController {
 	@GetMapping("customer/order/list")
 	public ModelAndView viewMyOrder(Principal principal) {
 		User user = userService.findByEmail(principal.getName());
-		ModelAndView modelAndView = new ModelAndView("customer/order/list");
-		modelAndView.addObject("orderList", user.getOrders());
-		return modelAndView;
+		return this.modelAndViewProviderHelper.
+				generateModelAndView(ViewConstants.CUSTOMER_ORDER_LIST,"orderList",user.getOrders());
 	}
 
 	/**
@@ -134,9 +115,8 @@ public class OrderController {
 	@GetMapping("admin/order/list")
 	public ModelAndView viewAllOrder() {
 		List<Order> oList = orderService.get();
-		ModelAndView modelAndView = new ModelAndView("admin/order/list");
-		modelAndView.addObject("oList", oList);
-		return modelAndView;
+		return this.modelAndViewProviderHelper.
+				generateModelAndView(ViewConstants.ADMIN_ORDER_LIST,"oList",oList);
 	}
 
 	/**
@@ -147,9 +127,8 @@ public class OrderController {
 	 */
 	@GetMapping("admin/order/detail")
 	public ModelAndView orderDetailAdmin(@RequestParam("id") long id) throws ProductNotFoundException {
-		ModelAndView modelAndView = new ModelAndView("admin/order/detail");
-		modelAndView.addObject("order", orderService.findById(id).get());
-		return modelAndView;
+		return this.modelAndViewProviderHelper.
+				generateModelAndView(ViewConstants.ADMIN_ORDER_DETAIL,"order", orderService.findById(id));
 	}
 
 	/**
@@ -160,9 +139,8 @@ public class OrderController {
 	 */
 	@GetMapping("customer/order/detail")
 	public ModelAndView orderDetailCustomer(@RequestParam("id") long id) throws ProductNotFoundException{
-		ModelAndView modelAndView = new ModelAndView("customer/order/detail");
-		modelAndView.addObject("order", orderService.findById(id).get());
-		return modelAndView;
+		return this.modelAndViewProviderHelper.
+				generateModelAndView(ViewConstants.CUSTOMER_ORDER_DETAIL,"order", orderService.findById(id));
 	}
 
 	/**

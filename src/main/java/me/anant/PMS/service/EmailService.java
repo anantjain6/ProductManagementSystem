@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-	@Autowired
+
 	private JavaMailSender javaMailSender;
+
+	 EmailService(JavaMailSender javaMailSender) {
+		 this.javaMailSender = javaMailSender;
+	 }
 
 	public void send(String to, String subject, String body) {
 		String template = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n"

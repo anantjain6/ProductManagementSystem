@@ -2,11 +2,9 @@ package me.anant.PMS.service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import me.anant.PMS.exceptions.ProductNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import me.anant.PMS.dao.OrderRepository;
@@ -14,14 +12,19 @@ import me.anant.PMS.model.Order;
 import me.anant.PMS.model.OrderProduct;
 import me.anant.PMS.model.Product;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class OrderService {
 
-	@Autowired
 	OrderRepository or;
-	
-	@Autowired
 	ProductService ps;
+
+	public OrderService(OrderRepository orderRepository,ProductService productService)
+	{
+		this.or=orderRepository;
+		this.ps=productService;
+	}
 	
 	public void save(Order order) {
 		or.save(order);
@@ -34,7 +37,7 @@ public class OrderService {
 	}
 
 	public boolean cancelOrder(long id) throws ProductNotFoundException {
-		Order order = this.findById(id).get();
+		Order order = this.findById(id);
 		LocalDateTime ldt1 = order.getCreateDateTime();
 		LocalDateTime ldt2 = LocalDateTime.now();
 		if(Duration.between(ldt1, ldt2).toHours() < 24) {
@@ -53,7 +56,7 @@ public class OrderService {
 		}
 	}
 	public void changeStatus(long id, String status) throws ProductNotFoundException {
-		Order order = this.findById(id).get();
+		Order order = this.findById(id);
 		if(status.equals("REJECT")) {
 			for(OrderProduct op: order.getOrderProduct()) {
 				ps.addQty(op.getProduct().getProductId(), op.getBuyqty());
@@ -63,11 +66,22 @@ public class OrderService {
 		or.save(order);
 	}
 
-	public Optional<Order> findById(Long id) throws ProductNotFoundException {
+	public Order findById(Long id) throws ProductNotFoundException {
 		Optional<Order> optionalOrder = or.findById(id);
-		if (!optionalOrder.isPresent()) {
-			throw new ProductNotFoundException("Order not found within the system");
+		return optionalOrder.orElseThrow(()->new ProductNotFoundException("Order not found within the system"));
+
+	}
+
+	public Set<OrderProduct> createOrderedProduct(String[] pIds, HttpServletRequest request)
+			throws ProductNotFoundException {
+		Set<OrderProduct> opList = new HashSet<>();
+		for(String pId: pIds) {
+			long pid = Long.parseLong(pId);
+			Product product = this.ps.findById(pid);
+			int buyqty = Integer.parseInt(request.getParameter(pId));
+			opList.add(new OrderProduct(product, buyqty));
+			this.ps.deductQty(pid, buyqty);
 		}
-		return optionalOrder;
+		return opList;
 	}
 }

@@ -12,8 +12,12 @@ import me.anant.PMS.model.ProductCategory;
 @Service
 public class ProductCategoryService {
 
-	@Autowired
 	ProductCategoryRepository pcr;
+
+	public ProductCategoryService(ProductCategoryRepository pcr)
+	{
+		this.pcr=pcr;
+	}
 	
 	public void save(ProductCategory productCategory) {
 		pcr.save(productCategory);
