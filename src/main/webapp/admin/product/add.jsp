@@ -29,22 +29,22 @@
                 <div class="form-group">
                     <label for="productName" class="control-label">Product Name</label>
 					<form:input type="text" path="productName" id="productName" cssClass="form-control" required="required"/>
-                	<small class="form-text text-muted"><font color="red"><form:errors path="productName"></form:errors></font></small>
+                	<small class="form-text text-muted"><font color="red"><form:errors path="productName"/></font></small>
                 </div>
                 <div class="form-group">
                     <label for="productPrice" class="control-label">Product Price</label>
 					<form:input type="text" path="productPrice" id="productPrice" cssClass="form-control" required="required"/>
-                	<small class="form-text text-muted"><font color="red"><form:errors path="productPrice"></form:errors></font></small>
+                	<small class="form-text text-muted"><font color="red"><form:errors path="productPrice"/></font></small>
                 </div>
                 <div class="form-group">
                     <label for="sellingPrice" class="control-label">Selling Price</label>
                     <form:input type="text" path="productSellingPrice" id="sellingPrice"  cssClass="form-control" required="required"/>
-                    <small class="form-text text-muted"><font color="red"><form:errors path="productSellingPrice"></form:errors></font></small>
+                    <small class="form-text text-muted"><font color="red"><form:errors path="productSellingPrice"/></font></small>
                 </div>
                 <div class="form-group">
                     <label for="productQty" class="control-label">Product Qty</label>
 					<form:input type="text" path="productQty" id="productQty" cssClass="form-control" required="required"/>
-                	<small class="form-text text-muted"><font color="red"><form:errors path="productQty"></form:errors></font></small>
+                	<small class="form-text text-muted"><font color="red"><form:errors path="productQty"/></font></small>
                 </div>
                 <div class="form-group">
                     <label for="productCategory" class="control-label">Product Category</label>
@@ -54,6 +54,7 @@
 						</c:forEach>
 					</form:select>
                 </div>
+                <small class="form-text text-muted"><font color="red"><form:errors/></font></small>
                 <div class="form-group">
                     <input type="submit" class="btn btn-success btn-lg btn-block" value="${title}">
                 </div>

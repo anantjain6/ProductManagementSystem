@@ -51,7 +51,7 @@
                         	sumAmu = sumAmu + sumQty * p.getProductSellingPrice();
                         }
                     %>
-                    <tr><td  colspan="4" class="text-center"><b>Total Amount</b></td><td>Rs. <%= sumAmu %></td></tr>
+                    <tr><td  colspan="5" class="text-center"><b>Total Amount</b></td><td>Rs. <%= sumAmu %></td></tr>
                 </tbody>
             </table>
         </div>

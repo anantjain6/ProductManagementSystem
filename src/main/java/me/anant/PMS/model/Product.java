@@ -1,5 +1,7 @@
 package me.anant.PMS.model;
 
+import me.anant.PMS.model.constraints.ValidProductSellingPrice;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
+@ValidProductSellingPrice
 public class Product {
 	@Id
 	@GeneratedValue
