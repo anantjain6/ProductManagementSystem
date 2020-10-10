@@ -88,15 +88,30 @@ public class ProductController {
 	}
 	
 	@PostMapping("/admin/product/update")
-	public String updateView(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
+	public String updateView(@ModelAttribute("command") @Valid Product product, @RequestParam("imageFile") MultipartFile imageFile, 
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		if(result.hasErrors()) {
 			model.addAttribute("pcList", categoryService.get());
 			return "admin/product/add";
 		}
-		productService.save(product);
-		redirectAttributes.addFlashAttribute("msg", "Product Updated successfully");
-		redirectAttributes.addFlashAttribute("class", "alert-success");
-		return "redirect:/admin/product/list";
+		
+		if(imageFile.isEmpty()) {
+			Optional<Product> optional = productService.findById(product.getProductId());
+			Product existingProduct = optional.get();
+			product.setImageName(existingProduct.getImageName());
+			productService.save(product);
+			redirectAttributes.addFlashAttribute("msg", "Product Updated successfully");
+			redirectAttributes.addFlashAttribute("class", "alert-success");
+			return "redirect:/admin/product/list";
+		}else {
+			String filePath = productService.saveImage(imageFile);
+			product.setImageName(filePath);
+			productService.save(product);
+			redirectAttributes.addFlashAttribute("msg", "Product Updated successfully");
+			redirectAttributes.addFlashAttribute("class", "alert-success");
+			return "redirect:/admin/product/list";
+		}
+		
 	}
 	
 	@GetMapping("/admin/product/report")
