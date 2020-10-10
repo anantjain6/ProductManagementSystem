@@ -15,9 +15,11 @@
     <div class="card">
        	<c:set var="action" value="/admin/product/add"/>
        	<c:set var="title" value="Add Product"/>
+       	<c:set var="imgName" value=""/>
 		<c:if test="${command.productId > 0}">
-		   <c:set var="action" value="/admin/product/update"/>
+		   	<c:set var="action" value="/admin/product/update"/>
        		<c:set var="title" value="Update Product"/>
+       		<c:set var="imgName" value="${command.imageName}"/>
 		</c:if>
         <div class="card-header text-white shadow bg-dark">
             <h2 class="float-left">${title}</h2>
@@ -31,7 +33,15 @@
                 	<div class="form-group row">
 	                	<div class="col-sm-6">
 	                		<a href="#" id="pop">
-	                          <img src="https://placehold.it/200x200" width="200" height="200" id="preview" class="img-thumbnail">
+	                			<c:choose>
+	                				<c:when test="${command.productId > 0}">
+	                					<img src="${pageContext.request.contextPath}/${command.imageName}" width="200" height="200" id="preview" class="img-thumbnail">
+	                				</c:when>
+	                				<c:when test="${command.productId == 0}">
+	                					<img src="https://placehold.it/200x200" width="200" height="200" id="preview" class="img-thumbnail">
+	                				</c:when>
+	                			</c:choose>
+	                		  
 	                        </a>
 	                	</div>
 	                	
@@ -40,7 +50,7 @@
 	                          <input type="file" name="imageFile" class="file" accept="image/*" />
 	                          
 	                          <div class="input-group">
-	                            <input type="text" class="form-control" placeholder="Upload File" id="file" disabled>
+	                            <input type="text" class="form-control" value="${imgName}" placeholder="Upload File" id="file" disabled>
 	                            <div class="input-group-append">
 	                              <button type="button" class="browse btn btn-primary disabled" id="capture">Browse</button>
 	                            </div>
