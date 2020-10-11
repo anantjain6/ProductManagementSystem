@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * Domain model describing ProductCategory Entity.
+ */
 @Entity
 public class ProductCategory {
 	@Id
