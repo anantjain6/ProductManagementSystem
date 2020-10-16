@@ -23,7 +23,7 @@ public class ProductService {
 		pr.deleteById(id);
 	}
 	public List<Product> get(){
-		return (List<Product>) pr.findAll();
+		return pr.findAllOrderByProductNameAsc();
 	}
 
 	public void deductQty(long id, int qty) throws ProductNotFoundException {
