@@ -22,8 +22,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         	<ul class="navbar-nav mr-auto">
 	            <sec:authorize access="hasRole('ADMIN')">
-                	<li class="nav-item"><a class="nav-link" href="/admin/product">Product</a></li>
-                	<li class="nav-item"><a class="nav-link" href="/admin/order/list">Order</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/admin/product">Product</a></li>                	
+		    			    <li class="nav-item"><a class="nav-link" href="/admin/order/list">Order</a></li>
+				        	<li class="nav-item"><a class="nav-link" href="/admin/product_category/list">Category</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/admin/product/report">Product Report</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/admin/category/list">Category Report</a></li>
                 </sec:authorize>
