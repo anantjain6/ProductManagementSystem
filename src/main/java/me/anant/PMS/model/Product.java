@@ -1,6 +1,7 @@
 package me.anant.PMS.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Set;
 
@@ -39,8 +40,9 @@ public class Product {
 	@Max(value=50, message="Product quantity can be maximum 50.")
 	int productQty;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    Set<OrderProduct> orderProduct;
+	Set<OrderProduct> orderProduct;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)

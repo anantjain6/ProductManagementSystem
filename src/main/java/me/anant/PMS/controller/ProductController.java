@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import me.anant.PMS.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,18 +79,13 @@ public class ProductController {
 	}
 
 	/**
-	 * This GET api is responsible to delete the product.
+	 * This DELETE api is responsible to delete the product.
 	 * @param id
-	 * @param redirectAttributes
-	 * @return redirect path
 	 */
-	@GetMapping("/admin/product/delete")
-	public String list(@RequestParam("id") long id,
-			final RedirectAttributes redirectAttributes) {
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Void> list(@PathVariable("id") long id) {
 		productService.delete(id);
-		redirectAttributes.addFlashAttribute("msg", "Product deleted successfully");
-		redirectAttributes.addFlashAttribute("class", "alert-success");
-		return "redirect:/admin/product/list";
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	/**

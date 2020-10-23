@@ -38,14 +38,17 @@
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 
-    function renderProducts(products) {
+    const renderProducts = (products) => {
         const container = document.getElementById("products");
-        products.forEach(product => {
-            container.innerHTML += productTemplate(product);
-        });
+        if (container) {
+            container.innerHTML = '';
+            products.forEach(product => {
+                container.innerHTML += productTemplate(product);
+            });
+        }
     }
 
-    function productTemplate(product) {
+    const productTemplate = (product) => {
         return `
             <tr>
                 <th scope="row">`+product.productId+`</th>
@@ -54,22 +57,60 @@
                 <td>`+product.productQty+`</td>
                 <td>
                     <a href='#' class="btn btn-success" onclick="">Edit</a>
-                    <a href='#' class="btn btn-danger" onclick="">Delete</a>
+                    <a href='#' class="btn btn-danger" onclick="deleteProduct(`+product.productId+`)">Delete</a>
                 </td>
             </tr>`;
     }
 
-    function loadProducts() {
+    const loadProducts = () => {
         const request = new XMLHttpRequest();
         const url = "/admin/product/list"
         request.open('GET', url, true);
-        console.log("Calling home...");
         request.send();
         request.onreadystatechange = () => {
             if (request.readyState === 4 && request.status === 200) {
-                console.log(JSON.parse(request.response));
                 renderProducts(JSON.parse(request.response));
+            } else {
+               // TODO 404
             }
+        }
+    }
+
+    const deleteProduct = (id) => {
+        if (confirm("Do you really want to delete the product?")) { // TODO
+            if (Number.isSafeInteger(id)) {
+                const request = new XMLHttpRequest();
+                const url = "/admin/product/delete/" + id;
+                request.open('DELETE', url, true);
+                request.onreadystatechange = () => {
+                    if (request.readyState === 4 && request.status === 204) {
+                        displaySuccess("Success.");
+                    }
+                    loadProducts();
+                }
+                request.send();
+            }
+        }
+    }
+
+    const displaySuccess = message => {
+        const successMessage = document.getElementById("successMsg");
+        if (successMessage) {
+            successMessage.innerText = message;
+            hideElement(successMessage);
+            showElement(successMessage);
+        }
+    }
+
+    const showElement = (element) => {
+        if (element) {
+            element.style.display = 'block';
+        }
+    }
+
+    const hideElement = (element) => {
+        if (element) {
+            element.style.display = 'none';
         }
     }
 
