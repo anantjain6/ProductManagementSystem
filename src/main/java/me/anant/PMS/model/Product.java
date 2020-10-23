@@ -1,5 +1,7 @@
 package me.anant.PMS.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -33,13 +35,14 @@ public class Product {
 	@Min(value=0, message="Product quantity can not be negative")
 	@Max(value=50, message="Product quantity can be maximum 50.")
 	int productQty;
-	
+
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     Set<OrderProduct> orderProduct;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-    ProductCategory category;
-	
+	ProductCategory category;
+
 	public Product() {
 		// TODO Auto-generated constructor stub
 	}

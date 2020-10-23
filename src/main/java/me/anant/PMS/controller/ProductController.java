@@ -1,18 +1,15 @@
 package me.anant.PMS.controller;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,6 +18,7 @@ import me.anant.PMS.service.ProductCategoryService;
 import me.anant.PMS.service.ProductService;
 
 @Controller
+@RequestMapping("/admin/product")
 public class ProductController {
 	@Autowired
 	ProductService productService;
@@ -28,7 +26,7 @@ public class ProductController {
 	@Autowired
 	ProductCategoryService categoryService;
 	
-	@GetMapping("/admin/product/add")
+	@GetMapping("/add")
 	public ModelAndView addView() {
 		ModelAndView modelAndView = new ModelAndView("admin/product/add");
 		modelAndView.addObject("pcList", categoryService.get());
@@ -36,7 +34,7 @@ public class ProductController {
 		return modelAndView;
 	}
 	
-	@PostMapping("/admin/product/add")
+	@PostMapping("/add")
 	public String add(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		if(result.hasErrors()) {
 			model.addAttribute("pcList", categoryService.get());
@@ -47,13 +45,16 @@ public class ProductController {
 		redirectAttributes.addFlashAttribute("class", "alert-success");
 		return "redirect:/admin/product/add";
 	}
-	
-	@GetMapping("/admin/product/list")
-	public ModelAndView list() {
+
+	@GetMapping
+	public String index() {
+		return "admin/product/list";
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<List<Product>> list() {
 		List<Product> pList = productService.get();
-		ModelAndView modelAndView = new ModelAndView("/admin/product/list");
-		modelAndView.addObject("pList", pList);
-		return modelAndView;
+		return ResponseEntity.ok(pList);
 	}
 	
 	@GetMapping("/admin/product/delete")
@@ -87,7 +88,7 @@ public class ProductController {
 		return "redirect:/admin/product/list";
 	}
 	
-	@GetMapping("/admin/product/report")
+	@GetMapping("/report")
 	public ModelAndView report() {
 		ModelAndView modelAndView = new ModelAndView("admin/product/report");
 		modelAndView.addObject("pList", productService.get());
