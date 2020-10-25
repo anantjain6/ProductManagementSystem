@@ -77,14 +77,14 @@
     }
 
     const deleteProduct = (id) => {
-        if (confirm("Do you really want to delete the product?")) { // TODO
+        if (confirm("Are you sure you want to delete it?")) { // TODO
             if (Number.isSafeInteger(id)) {
                 const request = new XMLHttpRequest();
                 const url = "/admin/product/delete/" + id;
                 request.open('DELETE', url, true);
                 request.onreadystatechange = () => {
                     if (request.readyState === 4 && request.status === 204) {
-                        displaySuccess("Success.");
+                        displaySuccess("Product deleted successfully.");
                     }
                     loadProducts();
                 }
@@ -156,7 +156,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success btn-lg btn-block" value="add/edit">
+                    <input type="submit" class="btn btn-success btn-lg btn-block" value="Save">
                 </div>
             </form>
         `
@@ -177,7 +177,6 @@
         const url = "/admin/product/categories";
         request.open('GET', url, true);
         request.onreadystatechange = () => {
-            console.log(request);
             if (request.readyState === 4 && request.status === 200) {
                 renderCategories(JSON.parse(request.response));
             }
@@ -195,7 +194,6 @@
                 "quantity": document.getElementById("productQuantity").value,
                 "category": document.getElementById("productCategory").value,
             }
-            console.log(JSON.stringify(product));
             const request = new XMLHttpRequest();
             const url = "/admin/product/update";
             request.open('PUT', url, true);
@@ -207,10 +205,9 @@
                         return;
                     }
                     if (request.status === 404) {
-                        displayError("Product not found");
+                        displayError("Product not found.");
                     }
                 }
-
             }
             request.send(JSON.stringify(product));
         }

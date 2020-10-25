@@ -41,33 +41,30 @@ public class ProductController {
 	 * @return ModelAndView
 	 */
 	@GetMapping("/add")
-	public ModelAndView addView() {
-		ModelAndView modelAndView = new ModelAndView("admin/product/add");
-		modelAndView.addObject("pcList", categoryService.get());
-		modelAndView.addObject("command", new Product());
-		return modelAndView;
+	public String addView() {
+		return "/admin/product/add";
 	}
 	
 	/**
 	 * This api is responsible to add Product.
-	 * @param product
-	 * @param result
-	 * @param model
-	 * @param redirectAttributes
-	 * @return String redirect path
+	 * @param productDto - product data
+	 * @return 201 created
 	 */
-	@PostMapping("/add")
-	public String add(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
-		if(result.hasErrors()) {
-			model.addAttribute("pcList", categoryService.get());
-			return "admin/product/add";
-		}
+	@PostMapping(value = "/add")
+	public ResponseEntity<Void> add(@RequestBody ProductDto productDto) {
+		Product product = new Product();
+		product.setProductName(productDto.getName());
+		product.setProductPrice(productDto.getPrice());
+		product.setProductQty(productDto.getQuantity());
+		product.setCategory(categoryService.findById(productDto.getCategory()).get());
 		productService.save(product);
-		redirectAttributes.addFlashAttribute("msg", "Product added successfully");
-		redirectAttributes.addFlashAttribute("class", "alert-success");
-		return "redirect:/admin/product/add";
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
+	/**
+	 * This endpoint returns products index page.
+	 * @return product list uri string
+	 */
 	@GetMapping
 	public String index() {
 		return "admin/product/list";
@@ -109,6 +106,10 @@ public class ProductController {
 		}
 	}
 
+	/**
+	 * This endpoint return product add form.
+	 * @return string - product add form uri
+	 */
 	@GetMapping("/update/{id}")
 	public String showUpdateForm() {
 		return "/admin/product/add";
@@ -134,6 +135,10 @@ public class ProductController {
 		}
 	}
 
+	/**
+	 * This endpoint returns list of categories
+	 * @return list of categories
+	 */
 	@GetMapping("/categories")
 	public ResponseEntity<List<CategoryDto>> fetchCategories() {
 		List<ProductCategory> categories = categoryService.get();
