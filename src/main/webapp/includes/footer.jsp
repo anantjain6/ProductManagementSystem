@@ -56,7 +56,7 @@
                 <td>`+product.productPrice+`</td>
                 <td>`+product.productQty+`</td>
                 <td>
-                    <a href='#' class="btn btn-success" onclick="">Edit</a>
+                    <a href="/admin/product/update/`+product.productId+`" class="btn btn-success">Edit</a>
                     <a href='#' class="btn btn-danger" onclick="deleteProduct(`+product.productId+`)">Delete</a>
                 </td>
             </tr>`;
@@ -93,12 +93,144 @@
         }
     }
 
+    const fetchProduct = (id) => {
+        const request = new XMLHttpRequest();
+        const url = "/admin/product/" + parseInt(id);
+        request.open('GET', url, true);
+        request.onreadystatechange = () => {
+            if (request.readyState === 4 && request.status === 200) {
+                const product = JSON.parse(request.response);
+                const productFormHolder = document.getElementById("productFormHolder");
+                if (productFormHolder) {
+                    productFormHolder.innerHTML = populateForm(product);
+                    const title = document.getElementById("productFormTitle");
+                    title.innerText = "Edit product";
+                    const productCategory = document.getElementById("productCategory");
+                    if (productCategory) {
+                        const categories = fetchCategories();
+                        productCategory.innerHTML += renderCategories(categories);
+                    }
+                    const form = document.getElementById("productForm");
+                    form.addEventListener("submit", submitProduct(id));
+                }
+            }
+        }
+        request.send();
+    }
+
+    const populateForm = (product) => {
+        return `
+            <form action="#" id="productForm">
+                <div class="form-group">
+                    <label for="productName" class="control-label">Product Name</label>
+                    <input type="text"
+                        id="productName"
+                        class="form-control"
+                        required minlength="3"
+                        value="`+product.name+`"/>
+                    <span id="productNameErrorMessage" class="form-text text-muted"></span>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice" class="control-label">Product Price</label>
+                    <input type="text"
+                        id="productPrice"
+                        class="form-control"
+                        required min="0.1"
+                        pattern="[0-9]*\\.?[0-9]+"
+                        value="`+product.price+`"/>
+                    <span id="productPriceErrorMessage" class="form-text text-muted"></span>
+                </div>
+                <div class="form-group">
+                    <label for="productQuantity" class="control-label">Product Qty</label>
+                    <input type="text"
+                        id="productQuantity"
+                        class="form-control"
+                        required
+                        value="`+product.quantity+`"/>
+                    <span id="productQtyErrorMessage" class="form-text text-muted"></span>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory" class="control-label">Product Category</label>
+                    <select id="productCategory" class="form-control">
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-success btn-lg btn-block" value="add/edit">
+                </div>
+            </form>
+        `
+    }
+
+    const renderCategories = (categories) => {
+        const select = document.getElementById("productCategory");
+        if (select && categories) {
+            select.innerHTML = "";
+            categories.forEach(category => {
+                select.innerHTML += `<option value="`+category.id+`">`+category.name+`</option>`
+            });
+        }
+    }
+
+    const fetchCategories = () => {
+        const request = new XMLHttpRequest();
+        const url = "/admin/product/categories";
+        request.open('GET', url, true);
+        request.onreadystatechange = () => {
+            console.log(request);
+            if (request.readyState === 4 && request.status === 200) {
+                renderCategories(JSON.parse(request.response));
+            }
+        }
+        request.send();
+    }
+
+    const submitProduct = (id) => {
+        return (e) => {
+            e.preventDefault();
+            const product = {
+                "id": id,
+                "name": document.getElementById("productName").value,
+                "price": document.getElementById("productPrice").value,
+                "quantity": document.getElementById("productQuantity").value,
+                "category": document.getElementById("productCategory").value,
+            }
+            console.log(JSON.stringify(product));
+            const request = new XMLHttpRequest();
+            const url = "/admin/product/update";
+            request.open('PUT', url, true);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.onreadystatechange = () => {
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        displaySuccess("Product updated successfully.");
+                        return;
+                    }
+                    if (request.status === 404) {
+                        displayError("Product not found");
+                    }
+                }
+
+            }
+            request.send(JSON.stringify(product));
+        }
+    }
+
     const displaySuccess = message => {
         const successMessage = document.getElementById("successMsg");
         if (successMessage) {
             successMessage.innerText = message;
             hideElement(successMessage);
             showElement(successMessage);
+        }
+    }
+
+    const displayError = message => {
+        const errorMessage = document.getElementById("errorMsg");
+        if (errorMessage) {
+            errorMessage.innerText = message;
+            hideElement(errorMessage);
+            showElement(errorMessage);
         }
     }
 

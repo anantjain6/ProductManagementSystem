@@ -77,7 +77,7 @@ public class OrderController {
 		Set<OrderProduct> opList = new HashSet<>();
 		for(String pId: pIds) {
 			long pid = Long.parseLong(pId);
-			Product product = productService.findById(pid).get();
+			Product product = productService.findById(pid);
 			int buyqty = Integer.parseInt(request.getParameter(pId));
 			opList.add(new OrderProduct(product, buyqty));
 			productService.deductQty(pid, buyqty);

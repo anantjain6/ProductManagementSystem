@@ -1,7 +1,6 @@
 package me.anant.PMS.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Set;
 

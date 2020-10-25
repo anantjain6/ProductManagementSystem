@@ -4,9 +4,13 @@ import java.util.*;
 
 import javax.validation.Valid;
 
+import me.anant.PMS.dto.CategoryDto;
+import me.anant.PMS.dto.ProductDto;
 import me.anant.PMS.exceptions.ProductNotFoundException;
+import me.anant.PMS.model.ProductCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +29,7 @@ import me.anant.PMS.service.ProductService;
 @Controller
 @RequestMapping("/admin/product")
 public class ProductController {
+
 	@Autowired
 	ProductService productService;
 	
@@ -80,7 +85,7 @@ public class ProductController {
 
 	/**
 	 * This DELETE api is responsible to delete the product.
-	 * @param id
+	 * @param id - unique id of the product
 	 */
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> list(@PathVariable("id") long id) {
@@ -90,37 +95,53 @@ public class ProductController {
 
 	/**
 	 * This api is responsible to fetch the model and view for update Products Screen.
-	 * @param id
-	 * @return ModelAndView
+	 * @param id - unique id of the product
+	 * @return ResponseEntity
 	 */
-	@GetMapping("/admin/product/update")
-	public ModelAndView updateView(long id) throws ProductNotFoundException {
-		Optional<Product> optional = productService.findById(id);
-		Product product = optional.get();
-		ModelAndView modelAndView = new ModelAndView("admin/product/add");
-		modelAndView.addObject("command", product);
-		modelAndView.addObject("pcList", categoryService.get());
-		return modelAndView;
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductDto> fetchProduct(@PathVariable long id) {
+		try {
+			Product product = productService.findById(id);
+			ProductDto dto = productService.toDto(product);
+			return ResponseEntity.ok(dto);
+		} catch (ProductNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
+	@GetMapping("/update/{id}")
+	public String showUpdateForm() {
+		return "/admin/product/add";
 	}
 
 	/**
-	 * This POST api is responsible to update the Product.
-	 * @param product
-	 * @param result
-	 * @param model
-	 * @param redirectAttributes
-	 * @return String redirect path
+	 * This PUT api is responsible to update the Product.
+	 * @return ResponseEntity
 	 */
-	@PostMapping("/admin/product/update")
-	public String updateView(@ModelAttribute("command") @Valid Product product, BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
-		if(result.hasErrors()) {
-			model.addAttribute("pcList", categoryService.get());
-			return "admin/product/add";
+	@PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateProduct(@RequestBody ProductDto productDto) {
+		try {
+			final Product product = productService.findById(productDto.getId());
+			product.setProductName(productDto.getName());
+			product.setProductPrice(productDto.getPrice());
+			product.setProductQty(productDto.getQuantity());
+			Optional<ProductCategory> productCategory = categoryService.findById(productDto.getCategory());
+			productCategory.ifPresent(product::setCategory);
+			productService.save(product);
+			return ResponseEntity.status(HttpStatus.OK).build();
+		} catch (ProductNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		productService.save(product);
-		redirectAttributes.addFlashAttribute("msg", "Product Updated successfully");
-		redirectAttributes.addFlashAttribute("class", "alert-success");
-		return "redirect:/admin/product/list";
+	}
+
+	@GetMapping("/categories")
+	public ResponseEntity<List<CategoryDto>> fetchCategories() {
+		List<ProductCategory> categories = categoryService.get();
+		List<CategoryDto> result = new ArrayList<>();
+		categories.forEach(category -> {
+			result.add(productService.toDto(category));
+		});
+		return ResponseEntity.ok(result);
 	}
 
 	/**
