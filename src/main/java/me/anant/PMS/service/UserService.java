@@ -8,8 +8,13 @@ import me.anant.PMS.model.User;
 
 @Service
 public class UserService {
-	@Autowired
+
 	UserRepository ur;
+
+	public UserService(UserRepository ur)
+	{
+		this.ur=ur;
+	}
 	
 	public User findByEmail(String email) {
 		return ur.findByEmail(email);

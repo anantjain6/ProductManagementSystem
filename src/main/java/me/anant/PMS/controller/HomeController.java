@@ -2,6 +2,8 @@ package me.anant.PMS.controller;
 
 import java.util.List;
 
+import me.anant.PMS.Helper.ModelAndViewProviderHelper;
+import me.anant.PMS.RequestMappingConstants.ViewConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,15 @@ import me.anant.PMS.service.ProductService;
  */
 @Controller
 public class HomeController {
-	@Autowired
+
 	ProductService  productService;
+	ModelAndViewProviderHelper modelAndViewProviderHelper;
+
+	public HomeController(ProductService productService,ModelAndViewProviderHelper modelAndViewProviderHelper)
+	{
+		this.productService=productService;
+		this.modelAndViewProviderHelper=modelAndViewProviderHelper;
+	}
 
 	/**
 	 * This api is responsible to view home page.
@@ -24,7 +33,7 @@ public class HomeController {
 	 */
 	@GetMapping("/")
 	public String index() {
-		return "index";
+		return ViewConstants.HOME_PAGE;
 	}
 
 	/**
@@ -34,8 +43,6 @@ public class HomeController {
 	@GetMapping("/customer")
 	public ModelAndView customerHome() {
 		List<Product> pList =  productService.get();
-		ModelAndView modelAndView = new ModelAndView("customer/home");
-		modelAndView.addObject("pList", pList);
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.CUSTOMER_HOME_PAGE,"pList",pList);
 	}
 }

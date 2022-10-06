@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import me.anant.PMS.Helper.ModelAndViewProviderHelper;
+import me.anant.PMS.RequestMappingConstants.ViewConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,14 +33,20 @@ import me.anant.PMS.service.ProductCategoryService;
  */
 @Controller
 public class ProductCategoryController {
-	@Autowired
+
 	ProductCategoryService categoryService;
+	ModelAndViewProviderHelper modelAndViewProviderHelper;
+
+	public ProductCategoryController(ProductCategoryService productCategoryService,ModelAndViewProviderHelper modelAndViewProviderHelper)
+	{
+		this.categoryService=productCategoryService;
+		this.modelAndViewProviderHelper=modelAndViewProviderHelper;
+	}
 	
 	@GetMapping("/admin/product_category/add")
 	public ModelAndView addView() {
-		ModelAndView modelAndView = new ModelAndView("admin/product_category/add");
-		modelAndView.addObject("command",new ProductCategory());
-		return modelAndView;
+		return this.modelAndViewProviderHelper.
+				generateModelAndView(ViewConstants.ADMIN_PRODUCT_CATEGORY_ADD,"command",new ProductCategory());
 	}
 
 	@PostMapping("/admin/product_category/add")
@@ -54,18 +62,15 @@ public class ProductCategoryController {
  
 	@GetMapping("admin/product_category/list")
 	public ModelAndView productCategoryList() {
-		ModelAndView modelAndView = new ModelAndView("admin/product_category/list");
-		modelAndView.addObject("cList", categoryService.get());
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_PRODUCT_CATEGORY_LIST,
+				"cList", categoryService.get());
 	}
 
 	@GetMapping("/admin/product_category/update")
 	public ModelAndView updateView(long id) {
 		Optional<ProductCategory> optional = categoryService.findById(id);
 		ProductCategory productCategory = optional.get();
-		ModelAndView modelAndView = new ModelAndView("admin/product_category/add");
-		modelAndView.addObject("command", productCategory);
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_PRODUCT_CATEGORY_ADD,"command", productCategory);
 	}
 	
 	@PostMapping("/admin/product_category/update")
@@ -95,9 +100,7 @@ public class ProductCategoryController {
 	 */
 	@GetMapping("admin/category/list")
 	public ModelAndView categoryList() {
-		ModelAndView modelAndView = new ModelAndView("admin/category/list");
-		modelAndView.addObject("cList", categoryService.get());
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_CATEGORY_LIST,"cList", categoryService.get());
 	}
 
 	/**
@@ -109,8 +112,6 @@ public class ProductCategoryController {
 	public ModelAndView report(@RequestParam("id") long id) {
 		Set<Product> pSet = categoryService.findById(id).get().getProducts();
 		List<Product> pList = new ArrayList<>(pSet);
-		ModelAndView modelAndView = new ModelAndView("admin/product/report");
-		modelAndView.addObject("pList", pList);
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_PRODUCT_REPORT,"pList", pList);
 	}
 }

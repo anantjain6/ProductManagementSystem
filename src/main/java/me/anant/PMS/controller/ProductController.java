@@ -1,9 +1,13 @@
 package me.anant.PMS.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.validation.Valid;
 
+import me.anant.PMS.Helper.ModelAndViewProviderHelper;
+import me.anant.PMS.RequestMappingConstants.ViewConstants;
 import me.anant.PMS.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,11 +29,16 @@ import me.anant.PMS.service.ProductService;
  */
 @Controller
 public class ProductController {
-	@Autowired
 	ProductService productService;
-	
-	@Autowired
 	ProductCategoryService categoryService;
+	ModelAndViewProviderHelper modelAndViewProviderHelper;
+
+	public ProductController(ProductService productService,ProductCategoryService productCategoryService,ModelAndViewProviderHelper modelAndViewProviderHelper)
+	{
+		this.productService=productService;
+		this.categoryService=productCategoryService;
+		this.modelAndViewProviderHelper=modelAndViewProviderHelper;
+	}
 
 	/**
 	 * This api is responsible to fetch the model and view for add Product.
@@ -37,10 +46,10 @@ public class ProductController {
 	 */
 	@GetMapping("/admin/product/add")
 	public ModelAndView addView() {
-		ModelAndView modelAndView = new ModelAndView("admin/product/add");
-		modelAndView.addObject("pcList", categoryService.get());
-		modelAndView.addObject("command", new Product());
-		return modelAndView;
+		Map<String,Object> attributeNameAndValueMap=new HashMap<>();
+		attributeNameAndValueMap.put("pcList", categoryService.get());
+		attributeNameAndValueMap.put("command", new Product());
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_PRODUCT_ADD,attributeNameAndValueMap);
 	}
 
 	/**
@@ -70,9 +79,7 @@ public class ProductController {
 	@GetMapping("/admin/product/list")
 	public ModelAndView list() {
 		List<Product> pList = productService.get();
-		ModelAndView modelAndView = new ModelAndView("/admin/product/list");
-		modelAndView.addObject("pList", pList);
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_PRODUCT_LIST,"pList", pList);
 	}
 
 	/**
@@ -97,12 +104,12 @@ public class ProductController {
 	 */
 	@GetMapping("/admin/product/update")
 	public ModelAndView updateView(long id) throws ProductNotFoundException {
-		Optional<Product> optional = productService.findById(id);
-		Product product = optional.get();
-		ModelAndView modelAndView = new ModelAndView("admin/product/add");
-		modelAndView.addObject("command", product);
-		modelAndView.addObject("pcList", categoryService.get());
-		return modelAndView;
+
+		Product product = productService.findById(id);
+		Map<String,Object> attributeNameAndValueMap=new HashMap<>();
+		attributeNameAndValueMap.put("command", product);
+		attributeNameAndValueMap.put("pcList", categoryService.get());
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_PRODUCT_ADD,attributeNameAndValueMap);
 	}
 
 	/**
@@ -131,8 +138,6 @@ public class ProductController {
 	 */
 	@GetMapping("/admin/product/report")
 	public ModelAndView report() {
-		ModelAndView modelAndView = new ModelAndView("admin/product/report");
-		modelAndView.addObject("pList", productService.get());
-		return modelAndView;
+		return this.modelAndViewProviderHelper.generateModelAndView(ViewConstants.ADMIN_PRODUCT_REPORT,"pList", productService.get());
 	}
 }
