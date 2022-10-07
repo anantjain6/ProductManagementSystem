@@ -1,5 +1,7 @@
 package me.anant.PMS.model;
 
+import me.anant.PMS.model.constraints.ValidProductSellingPrice;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,6 +21,7 @@ import javax.validation.constraints.Size;
  * Domain model describing Product and its attributes.
  */
 @Entity
+@ValidProductSellingPrice
 public class Product {
 	@Id
 	@GeneratedValue
@@ -31,6 +34,10 @@ public class Product {
 	@NotNull
 	@Min(value=0, message="Product price can not be negative value.")
 	float productPrice;
+
+	@NotNull
+	@Min(value=0, message="Product selling price can not be negative value")
+	float productSellingPrice;
 	
 	@NotNull
 	@Min(value=0, message="Product quantity can not be negative")
@@ -52,10 +59,11 @@ public class Product {
 		this.productId = productId;
 	}
 
-	public Product(String productName, float productPrice, int productQty, ProductCategory category) {
+	public Product(String productName, float productPrice, float productSellingPrice, int productQty, ProductCategory category) {
 		super();
 		this.productName = productName;
 		this.productPrice = productPrice;
+		this.productSellingPrice = productSellingPrice;
 		this.productQty = productQty;
 		this.category = category;
 	}
@@ -82,6 +90,14 @@ public class Product {
 
 	public void setProductPrice(float productPrice) {
 		this.productPrice = productPrice;
+	}
+
+	public float getProductSellingPrice() {
+		return productSellingPrice;
+	}
+
+	public void setProductSellingPrice(float sellingPrice) {
+		this.productSellingPrice = sellingPrice;
 	}
 
 	public int getProductQty() {

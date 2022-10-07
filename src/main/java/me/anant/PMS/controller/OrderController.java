@@ -96,12 +96,12 @@ public class OrderController {
 		float sum = 0;
 		for (OrderProduct op : opList)
 		{
-			sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
-			message = message + "<tr>" + 
-					"<td>"+op.getProduct().getProductName()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice()+"</td>" + 
-					"<td>"+op.getBuyqty()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice() * op.getBuyqty()+"</td>" + 
+			sum = sum + op.getProduct().getProductSellingPrice() * op.getBuyqty();
+			message = message + "<tr>" +
+					"<td>"+op.getProduct().getProductName()+"</td>" +
+					"<td>Rs. <s>"+op.getProduct().getProductPrice()+"</s> "+op.getProduct().getProductSellingPrice()+"</td>" +
+					"<td>"+op.getBuyqty()+"</td>" +
+					"<td>Rs. "+op.getProduct().getProductSellingPrice() * op.getBuyqty()+"</td>" +
 					"</tr>";
 		}
 		message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. "+sum+"</td></tr>" + 

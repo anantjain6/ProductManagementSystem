@@ -39,12 +39,12 @@
                         <tr>
                             <th scope="row"><%=op.getProduct().getProductId()%></th>
                             <td><%=op.getProduct().getProductName()%></td>
-                            <td>Rs. <%= op.getProduct().getProductPrice() %></td>
+                            <td>Rs. <s><%= op.getProduct().getProductPrice() %></s> <%= op.getProduct().getProductSellingPrice() %> </td>
                             <td><%= op.getBuyqty() %></td>
-                            <td>Rs. <%= op.getBuyqty() * op.getProduct().getProductPrice() %></td>
+                            <td>Rs. <%= op.getBuyqty() * op.getProduct().getProductSellingPrice() %></td>
                         </tr>
                         <%   
-                        	sumAmu = sumAmu + op.getBuyqty() * op.getProduct().getProductPrice();
+                        	sumAmu = sumAmu + op.getBuyqty() * op.getProduct().getProductSellingPrice();
                         }
                     %>
                     <tr><td  colspan="4" class="text-center"><b>Total Amount</b></td><td>Rs. <%= sumAmu %></td></tr>

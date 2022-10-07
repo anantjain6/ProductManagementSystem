@@ -28,15 +28,15 @@
 	                    	Set<OrderProduct> opList = (Set<OrderProduct>) request.getAttribute("opList");
 	                    	for (OrderProduct op : opList)
 	                        {
-	                    		sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
+	                    		sum = sum + op.getProduct().getProductSellingPrice() * op.getBuyqty();
 	                        %>
 	                        <tr>
 	                            <td><%=op.getProduct().getProductName()%></td>
-	                            <td>Rs. <%=op.getProduct().getProductPrice()%></td>
+								<td>Rs. <s><%=op.getProduct().getProductPrice()%></s> <%= op.getProduct().getProductSellingPrice()%></td>
 	                            <td><%=op.getBuyqty()%></td>
-	                            <td>Rs. <%=op.getProduct().getProductPrice() * op.getBuyqty()%></td>
+	                            <td>Rs. <%=op.getProduct().getProductSellingPrice() * op.getBuyqty()%></td>
 	                        </tr>
-	                        <%   
+	                        <%
 	                        }
 	                    %>
 	                    <tr><td  colspan="3" class="text-center"><b>Total Amount</b></td><td>Rs. <%= sum %></td></tr>
