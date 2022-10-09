@@ -69,4 +69,4 @@ Password: user
 
 ## License
 
-This project is licensed under the MIT License
+This project is licensed under the [MIT](https://github.com/shubham7668/ProductManagementSystem/blob/license-patch/LICENSE) License
