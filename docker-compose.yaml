@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  webapp:
+    build: .
+    ports:
+      - '8083:8083'
+    volumes:
+      - './target:/target'
