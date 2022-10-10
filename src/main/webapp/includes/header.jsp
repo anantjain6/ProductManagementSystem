@@ -9,7 +9,7 @@
         	<a class="navbar-brand" href="/">PMS</a>
         </sec:authorize>
         <sec:authorize access="hasRole('ADMIN')">
-        	<a class="navbar-brand" href="/admin/product/list">PMS</a>
+        	<a class="navbar-brand" href="/admin/product">PMS</a>
         </sec:authorize>
         <sec:authorize access="hasRole('CUSTOMER')">
         	<a class="navbar-brand" href="/customer/order_place">PMS</a>
@@ -22,9 +22,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         	<ul class="navbar-nav mr-auto">
 	            <sec:authorize access="hasRole('ADMIN')">
-                	<li class="nav-item"><a class="nav-link" href="/admin/product/list">Product</a></li>
-					<li class="nav-item"><a class="nav-link" href="/admin/order/list">Order</a></li>
-					<li class="nav-item"><a class="nav-link" href="/admin/product_category/list">Category</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/admin/product">Product</a></li>                	
+		    			    <li class="nav-item"><a class="nav-link" href="/admin/order/list">Order</a></li>
+				        	<li class="nav-item"><a class="nav-link" href="/admin/product_category/list">Category</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/admin/product/report">Product Report</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/admin/category/list">Category Report</a></li>
                 </sec:authorize>

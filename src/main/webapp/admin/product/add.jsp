@@ -1,7 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="me.anant.PMS.model.ProductCategory"%>
-<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="me.anant.PMS.model.Product"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,46 +11,34 @@
     <main role="main" class="container">
     <%@include file="/includes/msg.jsp"%>
     <div class="card">
-       	<c:set var="action" value="/admin/product/add"/>
-       	<c:set var="title" value="Add Product"/>
-		<c:if test="${command.productId > 0}">
-		   <c:set var="action" value="/admin/product/update"/>
-       		<c:set var="title" value="Update Product"/>
-		</c:if>
         <div class="card-header text-white shadow bg-dark">
-            <h2 class="float-left">${title}</h2>
+            <h2 id="productFormTitle" class="float-left">Add product</h2>
         </div>
-        <div class="card-body">
-            <form:form action="${action}" method="post">
-            	<form:input type="hidden" path="productId"/>
-            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <div id="productFormHolder" class="card-body">
+            <form id="productForm" action="#">
                 <div class="form-group">
                     <label for="productName" class="control-label">Product Name</label>
-					<form:input type="text" path="productName" id="productName" cssClass="form-control" required="required"/>
-                	<small class="form-text text-muted"><font color="red"><form:errors path="productName"></form:errors></font></small>
+                    <input type="text" id="productName" class="form-control" required minlength="3"/>
+                    <span id="productNameErrorMessage" class="form-text text-muted"></span>
                 </div>
                 <div class="form-group">
                     <label for="productPrice" class="control-label">Product Price</label>
-					<form:input type="text" path="productPrice" id="productPrice" cssClass="form-control" required="required"/>
-                	<small class="form-text text-muted"><font color="red"><form:errors path="productPrice"></form:errors></font></small>
+                    <input type="text" id="productPrice" class="form-control" required min="0.1" pattern="[0-9]*\.?[0-9]+"/>
+                    <span id="productPriceErrorMessage" class="form-text text-muted"></span>
                 </div>
                 <div class="form-group">
-                    <label for="productQty" class="control-label">Product Qty</label>
-					<form:input type="text" path="productQty" id="productQty" cssClass="form-control" required="required"/>
-                	<small class="form-text text-muted"><font color="red"><form:errors path="productQty"></form:errors></font></small>
+                    <label for="productQuantity" class="control-label">Product Qty</label>
+                    <input type="text" id="productQuantity" class="form-control" required/>
+                    <span id="productQtyErrorMessage" class="form-text text-muted"></span>
                 </div>
                 <div class="form-group">
                     <label for="productCategory" class="control-label">Product Category</label>
-					<form:select path="category.id" id="productCategory" cssClass="form-control">
-						<c:forEach items="${pcList}" var="category">
-							<form:option value="${category.id}">${category.name}</form:option>
-						</c:forEach>
-					</form:select>
+                    <select id="productCategory" class="form-control"></select>
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success btn-lg btn-block" value="${title}">
+                    <input type="submit" class="btn btn-success btn-lg btn-block" value="Save">
                 </div>
-            </form:form>
+            </form>
         </div>
     </div>
     </main>
@@ -60,5 +46,45 @@
     <br><br><br>
 
     <%@include file="/includes/footer.jsp"%>
+    <script type="application/javascript">
+        const title = document.getElementById("productFormTitle");
+        title.innerText = "Add product";
+        // window location parse /admin/update vs. /admin/update/1
+        const arr = window.location.pathname.split("/");
+        if (arr.length >= 4 && Number.isInteger(arr[4])) {
+            fetchProduct(arr[4]);
+        }
+
+        const submit = (e) => {
+            return (e) => {
+                e.preventDefault();
+                const product = {
+                    "name": document.getElementById("productName").value,
+                    "price": document.getElementById("productPrice").value,
+                    "quantity": document.getElementById("productQuantity").value,
+                    "category": document.getElementById("productCategory").value,
+                }
+                const request = new XMLHttpRequest();
+                const url = "/admin/product/add";
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-Type", "application/json");
+                request.onreadystatechange = () => {
+                    if (request.readyState === 4) {
+                        if (request.status === 201) {
+                            displaySuccess("Product created successfully.");
+                            return;
+                        }
+                    }
+                }
+                request.send(JSON.stringify(product));
+            }
+        }
+
+        const form = document.getElementById("productForm");
+        if (form) {
+            form.addEventListener("submit", submit(event));
+        }
+        renderCategories(fetchCategories());
+    </script>
 </body>
 </html>
