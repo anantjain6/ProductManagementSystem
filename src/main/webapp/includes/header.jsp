@@ -27,6 +27,7 @@
 					<li class="nav-item"><a class="nav-link" href="/admin/product_category/list">Category</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/admin/product/report">Product Report</a></li>
                 	<li class="nav-item"><a class="nav-link" href="/admin/category/list">Category Report</a></li>
+					<li class="nav-item"><a class="nav-link" href="/admin/user/list">User</a></li>
                 </sec:authorize>
 	            <sec:authorize access="hasRole('CUSTOMER')">
                 	<li class="nav-item"><a class="nav-link" href="/customer">Place Order</a></li>

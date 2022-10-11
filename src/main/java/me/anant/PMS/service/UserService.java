@@ -1,5 +1,7 @@
 package me.anant.PMS.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,5 +15,9 @@ public class UserService {
 	
 	public User findByEmail(String email) {
 		return ur.findByEmail(email);
+	}
+
+	public List<User> get(){
+		return ur.findAll();
 	}
 }
