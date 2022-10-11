@@ -48,10 +48,7 @@ public class HomeController {
 		List<Product> pList = new ArrayList<Product>();
 		List<ProductCategory> pcList = categoryService.get();
 		if (categoryId.isPresent()) {
-			Optional<ProductCategory> pc = pcList.stream().filter((productCategory) -> productCategory.getId() == categoryId.get()).findAny();
-			if (pc.isPresent()) {
-				pList = pc.get().getProducts().stream().collect(Collectors.toList());
-			}
+			pList = productService.findByCategoryId(categoryId.get());
 		} else {
 			pList = productService.get();
 		}
