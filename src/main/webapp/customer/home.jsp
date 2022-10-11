@@ -24,12 +24,7 @@
 								<tbody>
 									<%
 										List<Product> pl = (List<Product>) request.getAttribute("pList");
-										List<Product> pfl = pl;
-										Optional<Integer> categoryId = (Optional<Integer>) request.getAttribute("categoryId");
-										if (categoryId.isPresent()) {
-											pfl = pfl.stream().filter(p -> p.getCategory().getId() == categoryId.get()).collect(Collectors.toList());
-										}
-										for (Product p : pfl)
+										for (Product p : pl)
 										{
 										%>
 										<tr>

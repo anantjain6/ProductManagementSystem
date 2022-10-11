@@ -26,6 +26,7 @@ public class ProductCategoryService {
 	public List<ProductCategory> get(){
 		return (List<ProductCategory>) pcr.findAll();
 	}
+	
 	public Optional<ProductCategory> findById(Long id) {
 		return pcr.findById(id);
 	}

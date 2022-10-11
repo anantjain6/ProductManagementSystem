@@ -1,8 +1,11 @@
 package me.anant.PMS.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.hibernate.boot.archive.scan.spi.ClassDescriptor.Categorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,15 +43,19 @@ public class HomeController {
 	 */
 	@GetMapping("/customer")
 	public ModelAndView customerHome(
-		@RequestParam("categoryId") Optional<Integer> categoryId
+		@RequestParam("categoryId") Optional<Long> categoryId
 	) {
-		List<Product> pList = productService.get();
+		List<Product> pList = new ArrayList<Product>();
 		List<ProductCategory> pcList = categoryService.get();
-
+		if (categoryId.isPresent()) {
+			pList = productService.get().stream().filter(p -> p.getCategory().getId() == categoryId.get()).collect(Collectors.toList());
+		} else {
+			pList = productService.get();
+		}
 		ModelAndView modelAndView = new ModelAndView("customer/home");
 		modelAndView.addObject("pList", pList);
-		modelAndView.addObject("categoryId", categoryId);
 		modelAndView.addObject("pcList", pcList);
+		modelAndView.addObject("categoryId", categoryId);
 		return modelAndView;
 	}
 }

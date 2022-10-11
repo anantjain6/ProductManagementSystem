@@ -6,4 +6,8 @@ import me.anant.PMS.model.Product;
 
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
+    // find by category id
+    
+
+
 }
