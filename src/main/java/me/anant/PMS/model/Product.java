@@ -1,5 +1,9 @@
 package me.anant.PMS.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -22,26 +26,32 @@ import javax.validation.constraints.Size;
 public class Product {
 	@Id
 	@GeneratedValue
-	long productId;
+	private long productId;
 
 	@NotBlank(message="Product name can not be empty")
 	@Size(min = 3, message="Product name should be of minimum 3 character")
-	String productName;
+	private String productName;
 	
 	@NotNull
 	@Min(value=0, message="Product price can not be negative value.")
-	float productPrice;
+	private float productPrice;
 	
 	@NotNull
 	@Min(value=0, message="Product quantity can not be negative")
 	@Max(value=50, message="Product quantity can be maximum 50.")
-	int productQty;
+	private int productQty;
 	
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    Set<OrderProduct> orderProduct;
+    private Set<OrderProduct> orderProduct;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-    ProductCategory category;
+    private ProductCategory category;
+
+	@CreationTimestamp
+	private LocalDateTime createDateTime;
+
+	@UpdateTimestamp
+	private LocalDateTime updateDateTime;
 	
 	public Product() {
 		// TODO Auto-generated constructor stub
@@ -58,6 +68,22 @@ public class Product {
 		this.productPrice = productPrice;
 		this.productQty = productQty;
 		this.category = category;
+	}
+
+	public LocalDateTime getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(LocalDateTime createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	public LocalDateTime getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(LocalDateTime updateDateTime) {
+		this.updateDateTime = updateDateTime;
 	}
 
 	public long getProductId() {

@@ -1,5 +1,9 @@
 package me.anant.PMS.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,15 +20,20 @@ import javax.persistence.OneToMany;
 public class User {
 	@Id
 	@GeneratedValue
-	long id;
-	String name;
+	private long id;
+	private String name;
 	@Column(nullable=false, unique=true)
-	String email;
-	String password;
-    String role;
+	private String email;
+	private String password;
+    private String role;
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)		
 	//@JoinColumn(name="user_id")
-	Set<Order> orders;
+	private Set<Order> orders;
+	@CreationTimestamp
+	private LocalDateTime createDateTime;
+	@UpdateTimestamp
+	private LocalDateTime updateDateTime;
+
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
@@ -39,6 +48,23 @@ public class User {
 		this.password = password;
 		this.role = role;
 	}
+
+	public LocalDateTime getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(LocalDateTime createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	public LocalDateTime getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(LocalDateTime updateDateTime) {
+		this.updateDateTime = updateDateTime;
+	}
+
 	public long getId() {
 		return id;
 	}
