@@ -3,9 +3,7 @@ package me.anant.PMS.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.hibernate.boot.archive.scan.spi.ClassDescriptor.Categorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +37,7 @@ public class HomeController {
 
 	/**
 	 * This api is responsible to view Customer's Products.
+	 * @param categoryId Category Id of products to be viewed, if passed
 	 * @return ModelAndView
 	 */
 	@GetMapping("/customer")
