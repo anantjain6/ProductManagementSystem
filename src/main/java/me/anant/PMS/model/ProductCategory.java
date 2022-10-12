@@ -1,5 +1,9 @@
 package me.anant.PMS.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,14 +17,21 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class ProductCategory {
+
 	@Id
 	@GeneratedValue
-	long id;
+	private long id;
 	
-	String name;
+	private String name;
 	
 	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL)		
-	Set<Product> products;
+	private Set<Product> products;
+
+	@CreationTimestamp
+	private LocalDateTime createDateTime;
+
+	@UpdateTimestamp
+	private LocalDateTime updateDateTime;
 	
 	public ProductCategory() {
 		// TODO Auto-generated constructor stub
@@ -34,6 +45,22 @@ public class ProductCategory {
 	public ProductCategory(String name) {
 		super();
 		this.name = name;
+	}
+
+	public LocalDateTime getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(LocalDateTime createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	public LocalDateTime getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(LocalDateTime updateDateTime) {
+		this.updateDateTime = updateDateTime;
 	}
 
 	public long getId() {

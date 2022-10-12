@@ -1,6 +1,10 @@
 package me.anant.PMS.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -17,14 +21,20 @@ public class OrderProduct implements Serializable {
 	@Id
     @ManyToOne
     @JoinColumn
-	Order order;
+	private Order order;
 	
 	@Id
     @ManyToOne
     @JoinColumn
-	Product product;
-	
-	int buyqty;
+	private Product product;
+
+	@CreationTimestamp
+	private LocalDateTime createDateTime;
+
+	@UpdateTimestamp
+	private LocalDateTime updateDateTime;
+
+	private int buyqty;
 	
 	public OrderProduct() {
 		// TODO Auto-generated constructor stub
@@ -58,6 +68,22 @@ public class OrderProduct implements Serializable {
 
 	public void setBuyqty(int buyqty) {
 		this.buyqty = buyqty;
+	}
+
+	public LocalDateTime getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(LocalDateTime createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	public LocalDateTime getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(LocalDateTime updateDateTime) {
+		this.updateDateTime = updateDateTime;
 	}
 
 	@Override

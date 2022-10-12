@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * Domain model describing Order Entity.
@@ -21,20 +22,24 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Table(name = "orders")
 public class Order {
+
 	@Id
 	@GeneratedValue
-	long id;
+	private long id;
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    Set<OrderProduct> orderProduct;
+    private Set<OrderProduct> orderProduct;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    User user;
+    private User user;
     
 	@CreationTimestamp
-	LocalDateTime createDateTime;
-    
-	String status;
+	private LocalDateTime createDateTime;
+
+	@UpdateTimestamp
+	private LocalDateTime updateDateTime;
+
+	private String status;
 	
 	public Order() {
 		// TODO Auto-generated constructor stub
@@ -77,6 +82,14 @@ public class Order {
 
 	public void setCreateDateTime(LocalDateTime createDateTime) {
 		this.createDateTime = createDateTime;
+	}
+
+	public LocalDateTime getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(LocalDateTime updateDateTime) {
+		this.updateDateTime = updateDateTime;
 	}
 
 	public String getStatus() {
