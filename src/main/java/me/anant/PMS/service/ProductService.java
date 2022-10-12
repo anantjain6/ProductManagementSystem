@@ -49,4 +49,8 @@ public class ProductService {
 		}
 		return optionalProduct;
 	}
+
+	public List<Product> findByCategoryId(Long categoryId) {
+		return pr.findByCategoryId(categoryId);
+	}
 }
