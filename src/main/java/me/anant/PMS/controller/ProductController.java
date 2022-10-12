@@ -97,8 +97,7 @@ public class ProductController {
 	 */
 	@GetMapping("/admin/product/update")
 	public ModelAndView updateView(long id) throws ProductNotFoundException {
-		Optional<Product> optional = productService.findById(id);
-		Product product = optional.get();
+		Product product = productService.findById(id);
 		ModelAndView modelAndView = new ModelAndView("admin/product/add");
 		modelAndView.addObject("command", product);
 		modelAndView.addObject("pcList", categoryService.get());

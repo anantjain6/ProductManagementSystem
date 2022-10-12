@@ -40,7 +40,9 @@ public class OrderService {
 		if(Duration.between(ldt1, ldt2).toHours() < 24) {
 			if(!order.getStatus().equals("CANCEL") && !order.getStatus().equals("REJECT")) {
 				for(OrderProduct op: order.getOrderProduct()) {
-					ps.addQty(op.getProduct().getProductId(), op.getBuyqty());
+					Product product = op.getProduct();
+					product.setProductQty(product.getProductQty() + op.getBuyqty());
+					ps.updateProduct(product);
 				}
 				order.setStatus("CANCEL");
 				or.save(order);
@@ -56,7 +58,9 @@ public class OrderService {
 		Order order = this.findById(id).get();
 		if(status.equals("REJECT")) {
 			for(OrderProduct op: order.getOrderProduct()) {
-				ps.addQty(op.getProduct().getProductId(), op.getBuyqty());
+				Product product = op.getProduct();
+				product.setProductQty(product.getProductQty() + op.getBuyqty());
+				ps.updateProduct(product);
 			}
 		}
 		order.setStatus(status);

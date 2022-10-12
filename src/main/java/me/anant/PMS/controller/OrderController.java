@@ -1,6 +1,5 @@
 package me.anant.PMS.controller;
 
-import java.awt.Dialog.ModalExclusionType;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
@@ -77,10 +76,11 @@ public class OrderController {
 		Set<OrderProduct> opList = new HashSet<>();
 		for(String pId: pIds) {
 			long pid = Long.parseLong(pId);
-			Product product = productService.findById(pid).get();
-			int buyqty = Integer.parseInt(request.getParameter(pId));
-			opList.add(new OrderProduct(product, buyqty));
-			productService.deductQty(pid, buyqty);
+			Product product = productService.findById(pid);
+			int buyQuantity = Integer.parseInt(request.getParameter(pId));
+			opList.add(new OrderProduct(product, buyQuantity));
+			product.setProductQty(product.getProductQty() - buyQuantity);
+			productService.updateProduct(product);
 		}
 		User user = userService.findByEmail(principal.getName());
 		orderService.save(new Order(user, "PROCESSING", opList));
