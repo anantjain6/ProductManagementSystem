@@ -60,6 +60,43 @@ Password: user
 #### Admin can see which product sold how much
 !["Admin can see which product sold how much"](https://github.com/anantjain6/ProductManagementSystem/blob/master/document/Admin_Product_Report.png)
 
+## Dockerizing
+
+[Reference: Deploy a Spring Boot WAR into a Tomcat Server](https://www.baeldung.com/spring-boot-war-tomcat-deploy)
+
+This application is a Web Application that runs JSP, so the target should be compiled as WAR, instead of JAR.
+
+First, compile and packaging the application as WAR:
+
+```
+chmod +x ./mvnw
+./mvnw clean package
+```
+
+If you want to test the application in the host OS:
+
+```
+java -jar target/*.war
+```
+
+To build the docker image and docker run, where `myorg/pms` is the tag you can specify:
+
+```
+docker build -t myorg/pms .
+docker run -p 8083:8083 myorg/pms
+```
+
+### Docker compose
+
+If you want to orchestra with more services, you may consider `docker compose`. You could edit `docker-compose.yaml` to extend the services.
+
+To run by docker compose:
+
+```
+docker compose up --build
+```
+
+
 ## Contribution Guildlines
 -    Raise an issue for enhancement, new feature, bug report etc.
 -    Folk this repository
