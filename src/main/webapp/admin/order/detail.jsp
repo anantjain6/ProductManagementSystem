@@ -33,7 +33,7 @@
                 </thead>
                 <tbody>
                     <%
-                    	float sumAmu = 0;
+                    	double sumAmu = 0;
                     	Set<OrderProduct> opList = order.getOrderProduct();
                     	for (OrderProduct op : opList)
                         {
@@ -41,12 +41,12 @@
                         <tr>
                             <th scope="row"><%=op.getProduct().getProductId()%></th>
                             <td><%=op.getProduct().getProductName()%></td>
-                            <td>Rs. <%= op.getProduct().getProductPrice() %></td>
+                            <td>Rs. <%= op.getLineItemPrice() %></td>
                             <td><%= op.getBuyqty() %></td>
-                            <td>Rs. <%= op.getBuyqty() * op.getProduct().getProductPrice() %></td>
+                            <td>Rs. <%= op.getBuyqty() * op.getLineItemPrice() %></td>
                         </tr>
                         <%   
-                        	sumAmu = sumAmu + op.getBuyqty() * op.getProduct().getProductPrice();
+                        	sumAmu = sumAmu + op.getBuyqty() * op.getLineItemPrice();
                         }
                     %>
                     <tr><td  colspan="4" class="text-center"><b>Total Amount</b></td><td>Rs. <%= sumAmu %></td></tr>

@@ -101,7 +101,7 @@ public class OrderController {
 					"<td>"+op.getProduct().getProductName()+"</td>" + 
 					"<td>Rs. "+op.getProduct().getProductPrice()+"</td>" + 
 					"<td>"+op.getBuyqty()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice() * op.getBuyqty()+"</td>" + 
+					"<td>Rs. "+op.getLineItemPrice()+"</td>" +
 					"</tr>";
 		}
 		message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. "+sum+"</td></tr>" + 
