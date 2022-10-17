@@ -35,6 +35,8 @@ public class OrderProduct implements Serializable {
 	private LocalDateTime updateDateTime;
 
 	private int buyqty;
+
+	private double lineItemPrice;
 	
 	public OrderProduct() {
 		// TODO Auto-generated constructor stub
@@ -44,6 +46,7 @@ public class OrderProduct implements Serializable {
 		super();
 		this.product = product;
 		this.buyqty = buyqty;
+		this.lineItemPrice = product.getProductPrice();
 	}
     
 	public Order getOrder() {
@@ -84,6 +87,14 @@ public class OrderProduct implements Serializable {
 
 	public void setUpdateDateTime(LocalDateTime updateDateTime) {
 		this.updateDateTime = updateDateTime;
+	}
+
+	public double getLineItemPrice() {
+		return lineItemPrice;
+	}
+
+	public void setLineItemPrice(double lineItemPrice) {
+		this.lineItemPrice = lineItemPrice;
 	}
 
 	@Override

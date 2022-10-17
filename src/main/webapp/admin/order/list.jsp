@@ -36,11 +36,11 @@
                             <td><%=o.getCreateDateTime()%></td>
                             <td><%=o.getUser().getEmail()%></td>
                             <%
-                            float sum = 0;
+                            double sum = 0;
                             int count = 0;
                             Set<OrderProduct> opList = o.getOrderProduct();
                             for(OrderProduct op: opList) {
-                            	sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
+                            	sum = sum + op.getLineItemPrice()*op.getBuyqty();
                             	count++;
                             }
                             %>
