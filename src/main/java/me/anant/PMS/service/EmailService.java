@@ -1,5 +1,7 @@
 package me.anant.PMS.service;
 
+import java.io.File;
+
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ public class EmailService {
 				message.setSubject(subject);
 				message.setText(template, true);
 
+				message.addAttachment("invoice.pdf", new File("invoice.pdf"));
 			}
 		};
 

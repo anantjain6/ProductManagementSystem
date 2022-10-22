@@ -1,6 +1,5 @@
 package me.anant.PMS.controller;
 
-import java.awt.Dialog.ModalExclusionType;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +25,7 @@ import me.anant.PMS.service.EmailService;
 import me.anant.PMS.service.OrderService;
 import me.anant.PMS.service.ProductService;
 import me.anant.PMS.service.UserService;
+import me.anant.PMS.util.GenerateInvoice;
 
 /**
  * This Order Controller has rest endpoints which are responsible to perform following functionalities :
@@ -43,13 +43,13 @@ import me.anant.PMS.service.UserService;
 public class OrderController {
 	@Autowired
 	ProductService productService;
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	OrderService orderService;
-	
+
 	@Autowired
 	EmailService emailService;
 
@@ -59,7 +59,7 @@ public class OrderController {
 	 */
 	@GetMapping("/customer/order_place")
 	public ModelAndView customerHome() {
-		List<Product> pList =  productService.get();
+		List<Product> pList = productService.get();
 		ModelAndView modelAndView = new ModelAndView("customer/home");
 		modelAndView.addObject("pList", pList);
 		return modelAndView;
@@ -75,7 +75,7 @@ public class OrderController {
 	public ModelAndView orderPlace(HttpServletRequest request, Principal principal) throws ProductNotFoundException{
 		String[] pIds = request.getParameterValues("productId");
 		Set<OrderProduct> opList = new HashSet<>();
-		for(String pId: pIds) {
+		for (String pId : pIds) {
 			long pid = Long.parseLong(pId);
 			Product product = productService.findById(pid).get();
 			int buyqty = Integer.parseInt(request.getParameter(pId));
@@ -84,30 +84,24 @@ public class OrderController {
 		}
 		User user = userService.findByEmail(principal.getName());
 		orderService.save(new Order(user, "PROCESSING", opList));
-		
+
 		String message = "Hello,<br><br>Your order has been placed successfuly. Following is the detail of your order.<br><br>"
-				+ "<table>" + 
-				"<tr>" + 
-				"<th>Name</th>" + 
-				"<th>Price</th>" + 
-				"<th>Qty</th>" + 
-				"<th>Amount</th>" + 
-				"</tr>";
+				+ "<table>" + "<tr>" + "<th>Name</th>" + "<th>Price</th>" + "<th>Qty</th>" + "<th>Amount</th>"
+				+ "</tr>";
 		float sum = 0;
-		for (OrderProduct op : opList)
-		{
+		for (OrderProduct op : opList) {
 			sum = sum + op.getProduct().getProductPrice() * op.getBuyqty();
-			message = message + "<tr>" + 
-					"<td>"+op.getProduct().getProductName()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice()+"</td>" + 
-					"<td>"+op.getBuyqty()+"</td>" + 
-					"<td>Rs. "+op.getProduct().getProductPrice() * op.getBuyqty()+"</td>" + 
-					"</tr>";
+			message = message + "<tr>" + "<td>" + op.getProduct().getProductName() + "</td>" + "<td>Rs. "
+					+ op.getProduct().getProductPrice() + "</td>" + "<td>" + op.getBuyqty() + "</td>" + "<td>Rs. "
+					+ op.getProduct().getProductPrice() * op.getBuyqty() + "</td>" + "</tr>";
 		}
-		message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. "+sum+"</td></tr>" + 
-				"</table>";
-		emailService.send(principal.getName(), "Order Placed successfully", message);
+		message = message + "<tr><td  colspan=\"3\"><center><b>Total Amount</b></center></td><td>Rs. " + sum
+				+ "</td></tr>" + "</table>";
 		
+		GenerateInvoice.exportToPdfBox(opList, sum);
+		
+		emailService.send(principal.getName(), "Order Placed successfully", message);
+
 		ModelAndView modelAndView = new ModelAndView("customer/order_place");
 		modelAndView.addObject("opList", opList);
 		return modelAndView;
@@ -165,6 +159,7 @@ public class OrderController {
 		return modelAndView;
 	}
 
+
 	/**
 	 * This GET api is responsible to cancel an Order.
 	 * @param id
@@ -177,7 +172,8 @@ public class OrderController {
 			redirectAttributes.addFlashAttribute("msg", "Order cancelled successfully");
 			redirectAttributes.addFlashAttribute("class", "alert-success");
 		} else {
-			redirectAttributes.addFlashAttribute("msg", "Order not cancelled, since you can cencel PROCESSING or CONFIRMED order with 24 hours only.");
+			redirectAttributes.addFlashAttribute("msg",
+					"Order not cancelled, since you can cencel PROCESSING or CONFIRMED order with 24 hours only.");
 			redirectAttributes.addFlashAttribute("class", "alert-danger");
 		}
 		return "redirect:/customer/order/list";
