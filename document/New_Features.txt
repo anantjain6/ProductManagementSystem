@@ -1,0 +1,8 @@
+Feature:
+    1. Forgot password
+    2. if username and password is wron(no registered) redirect to sign-up form
+    3. add image product in show avalaible product
+    4. stock of product when customer order stock -1
+    5. choose a shipping service menu
+    6. edit data product before send email for customer
+
